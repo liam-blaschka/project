@@ -66,3 +66,5 @@ void LocationList::set_is_activated(int index, bool is_activated) {
 LocationList::~LocationList() {
     delete[] locations;
 }
+
+// not complete

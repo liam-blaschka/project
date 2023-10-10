@@ -9,3 +9,5 @@ using namespace std;
 string User::get_location(){
     return location.get_string();
 }
+
+// not complete
