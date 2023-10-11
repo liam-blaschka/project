@@ -88,7 +88,7 @@ int WeatherDataSet::update_data() {
     string data_literal;
 
     string url = "api.openweathermap.org/data/2.5/onecall?lat=" + to_string(location.x) + "&lon="
-                    + to_string(location.y) + "&exclude=hourly&units=metric&appid=103423645f4a2cd6fd178dc0d3da0097";
+                    + to_string(location.y) + "&exclude=hourly,minutely&units=metric&appid=103423645f4a2cd6fd178dc0d3da0097";
     curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_memory_callback);
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, &data_literal);

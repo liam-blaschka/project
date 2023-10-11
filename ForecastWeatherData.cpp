@@ -49,7 +49,7 @@ void ForecastWeatherData::update_data(json data) {
     conditions = data["weather"][0]["main"];
     max_temperature = round(float(data["temp"]["max"]));
     min_temperature = round(float(data["temp"]["min"]));
-    rain_chance = round(float(data["pop"]));
+    rain_chance = float(data["pop"]) * 100;
     // day
 }
 
