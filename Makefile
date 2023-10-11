@@ -1,0 +1,2 @@
+mymake: test_weatherdata.cpp
+		clang++ -g --std=c++17 -lcurl -o 2 test_weatherdata.cpp WeatherDataSet.cpp WeatherData.cpp CurrentWeatherData.cpp ForecastWeatherData.cpp -I//Users/liam/json-develop/include

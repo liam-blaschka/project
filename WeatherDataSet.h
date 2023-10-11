@@ -2,6 +2,8 @@
 #define WEATHERDATASET_H
 
 #include "WeatherData.h"
+#include "CurrentWeatherData.h"
+#include "ForecastWeatherData.h"
 
 using namespace std;
 

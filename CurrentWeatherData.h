@@ -7,10 +7,18 @@
 using namespace std;
 
 class CurrentWeatherData : public WeatherData {
+    private:
+        int temperature;
     public:
-        CurrentWeatherData(int temperature, string conditions, string location);
+        CurrentWeatherData(string location);
+        int get_temperature();
+        void set_temperature(int temperature);
+        void update_data(json data);
         // draw(RenderTarget& target, RenderStates states) override;
         ~CurrentWeatherData() {}
+
+
+        void display();
 };
 
 #endif

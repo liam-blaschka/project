@@ -9,17 +9,22 @@ using json = nlohmann::json;
 
 class WeatherData {
     protected:
-        int temperature;
         string conditions;
         string location;
 
     public:
-        WeatherData(int temperature, string condition, string location);
+        WeatherData(string location);
         int get_temperature();
         void set_temperature(int temperature);
         string get_conditions();
-        // virtual int update_data(json data);
-        ~WeatherData() {}
+        virtual void update_data(json data) = 0;
+        
+
+
+        virtual void display() = 0;
+        
+
+        virtual ~WeatherData() = 0;
 };
 
 #endif

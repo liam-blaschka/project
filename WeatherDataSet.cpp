@@ -1,4 +1,6 @@
 #include "WeatherData.h"
+#include "CurrentWeatherData.h"
+#include "ForecastWeatherData.h"
 #include "WeatherDataSet.h"
 #include <string>
 #include <iostream>
@@ -12,10 +14,13 @@ using json = nlohmann::json;
 
 WeatherDataSet::WeatherDataSet(string location) {
     this->location = location;
-    weather_data_list = new WeatherData*[8];
-
-
     count = 8;
+    weather_data_list = new WeatherData*[count];
+
+    weather_data_list[0] = new CurrentWeatherData(location);
+    for (int i = 1; i < 8; i++) {
+        weather_data_list[i] = new ForecastWeatherData(location);
+    }
 
     // set list to the 8 weather data objects
 }
@@ -85,12 +90,16 @@ int WeatherDataSet::update_data() {
 
     cout << endl << endl << "**parsed:" << data["list"][0] << endl;
 
-    // weather_data_list[0]->update_data(data["current"]);
+    weather_data_list[0]->update_data(data["current"]);
 
-    // for (int i = 0; i < count; i++) {
-    //     weather_data_list[i]->update_data(data["daily"][i]);
-    // }
+    for (int i = 1; i < count; i++) {
+        weather_data_list[i]->update_data(data["daily"][i - 1]);
+    }
 
+
+    for (int i = 0; i < count; i++) {
+        weather_data_list[i]->display();
+    }
     
 
     // write prettified JSON to another file
