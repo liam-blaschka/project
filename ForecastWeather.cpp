@@ -19,6 +19,6 @@ string ForecastWeatherData::get_day(){
     return day;
 }
 
-//// void ForecastWeatherData::update_data(){
+//// int ForecastWeatherData::update_data(){
 
 /// }

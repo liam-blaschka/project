@@ -15,7 +15,7 @@ class ForecastWeatherData : public WeatherData {
         int get_rain_chance();
         void set_rain_chance(int rain_chance);
         string get_day();
-        void update_data();
+        int update_data() override;
 };
 
 #endif

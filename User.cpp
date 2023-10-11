@@ -4,7 +4,9 @@
 
 using namespace std;
 
-// User::User() {}
+User::User(string location) {
+    this->location = location;
+}
 
 string User::get_location(){
     return location.get_string();

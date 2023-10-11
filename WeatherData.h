@@ -16,10 +16,7 @@ class WeatherData {
         int get_temperature();
         void set_temperature(int temperature);
         string get_conditions();
-        void update_data();
-
-    
-        
+        virtual int update_data();
 };
 
 #endif
