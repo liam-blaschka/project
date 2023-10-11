@@ -2,8 +2,10 @@
 #define WEATHERDATA_H
 
 #include <string>
+#include <nlohmann/json.hpp>
 
 using namespace std;
+using json = nlohmann::json;
 
 class WeatherData {
     protected:
@@ -16,7 +18,8 @@ class WeatherData {
         int get_temperature();
         void set_temperature(int temperature);
         string get_conditions();
-        virtual int update_data();
+        // virtual int update_data(json data);
+        ~WeatherData() {}
 };
 
 #endif

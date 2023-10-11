@@ -1,11 +1,11 @@
-#include "WeatherData.h"
+#include "WeatherDataSet.h"
 #include  <string>
 #include <iostream>
 
 int main() {
-    WeatherData weather_data(0, "", "");
+    WeatherDataSet data_set("");
 
-    int result = weather_data.update_data();
+    int result = data_set.update_data();
 
     return result;
 }

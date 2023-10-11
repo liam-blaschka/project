@@ -15,7 +15,8 @@ class WeatherDataSet {
         void add_weather_data(WeatherData* data);
         void remove_weather_data(int index);
         int get_count();
-        void update_data();
+        static size_t write_memory_callback(void *contents, size_t size, size_t nmemb, string *str);
+        int update_data();
         // void draw(RenderTarget& target, RenderStates states);
         ~WeatherDataSet();
 };

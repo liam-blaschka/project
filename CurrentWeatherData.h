@@ -10,6 +10,7 @@ class CurrentWeatherData : public WeatherData {
     public:
         CurrentWeatherData(int temperature, string conditions, string location);
         // draw(RenderTarget& target, RenderStates states) override;
+        ~CurrentWeatherData() {}
 };
 
 #endif
