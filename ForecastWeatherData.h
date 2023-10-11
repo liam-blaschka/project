@@ -5,6 +5,8 @@
 #include <string>
 #include <nlohmann/json.hpp>
 
+#include "Coordinates.h"
+
 using namespace std;
 
 class ForecastWeatherData : public WeatherData {
@@ -14,19 +16,20 @@ class ForecastWeatherData : public WeatherData {
         int rain_chance;
         string day;
     public:
-        ForecastWeatherData(string location);
-        int get_rain_chance();
-        void set_rain_chance(int rain_chance);
-        int get_max_temperature();
-        void set_max_temperature(int max_temperature);
-        int get_min_temperature();
-        void set_min_temperature(int min_temperature);
-        string get_day();
-        void update_data(json data);
+        ForecastWeatherData(Coordinates location, string day);
+        int get_rain_chance() override;
+        void set_rain_chance(int rain_chance) override;
+        int get_max_temperature() override;
+        void set_max_temperature(int max_temperature) override;
+        int get_min_temperature() override;
+        void set_min_temperature(int min_temperature) override;
+        string get_day() override;
+        void set_day(string day) override;
+        void update_data(json data) override;
         ~ForecastWeatherData() {}
 
 
-        void display();
+        void display() override;
 };
 
 #endif

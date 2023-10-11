@@ -4,12 +4,13 @@
 #include <math.h>
 #include <nlohmann/json.hpp>
 
+#include "Coordinates.h"
 #include <iostream>
 
 using namespace std;
 using json = nlohmann::json;
 
-CurrentWeatherData::CurrentWeatherData(string location):WeatherData(location) {}
+CurrentWeatherData::CurrentWeatherData(Coordinates location):WeatherData(location) {}
 
 int CurrentWeatherData::get_temperature() {
     return temperature;
@@ -27,5 +28,5 @@ void CurrentWeatherData::update_data(json data) {
 
 
 void CurrentWeatherData::display() {
-    cout << conditions << " " << temperature << endl;
+    cout << conditions << ", " << temperature << endl;
 }

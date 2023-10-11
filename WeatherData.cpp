@@ -4,10 +4,12 @@
 #include <fstream>
 #include <nlohmann/json.hpp>
 
+#include "Coordinates.h"
+
 using namespace std;
 using json = nlohmann::json;
 
-WeatherData::WeatherData(string location) {
+WeatherData::WeatherData(Coordinates location) {
     this->location = location;
 }
 

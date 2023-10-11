@@ -4,21 +4,23 @@
 #include "WeatherData.h"
 #include <string>
 
+#include "Coordinates.h"
+
 using namespace std;
 
 class CurrentWeatherData : public WeatherData {
     private:
         int temperature;
     public:
-        CurrentWeatherData(string location);
-        int get_temperature();
-        void set_temperature(int temperature);
-        void update_data(json data);
+        CurrentWeatherData(Coordinates location);
+        int get_temperature() override;
+        void set_temperature(int temperature) override;
+        void update_data(json data) override;
         // draw(RenderTarget& target, RenderStates states) override;
         ~CurrentWeatherData() {}
 
 
-        void display();
+        void display() override;
 };
 
 #endif

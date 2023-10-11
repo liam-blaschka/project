@@ -3,23 +3,31 @@
 #include "ForecastWeatherData.h"
 #include "WeatherDataSet.h"
 #include <string>
-#include <iostream>
 #include <curl/curl.h>
 #include <nlohmann/json.hpp>
+#include <ctime>
 
+#include "Coordinates.h"
 #include <fstream>
+#include <iostream>
 
 using namespace std;
 using json = nlohmann::json;
 
-WeatherDataSet::WeatherDataSet(string location) {
+WeatherDataSet::WeatherDataSet(Coordinates location) {
     this->location = location;
+
+    time_t current_time = time(0);
+    struct tm* local_time = localtime(&current_time);
+    int current_day_index = local_time->tm_wday;
+
     count = 8;
     weather_data_list = new WeatherData*[count];
 
     weather_data_list[0] = new CurrentWeatherData(location);
-    for (int i = 1; i < 8; i++) {
-        weather_data_list[i] = new ForecastWeatherData(location);
+    weather_data_list[1] = new ForecastWeatherData(location, "Today");
+    for (int i = 2; i < 8; i++) {
+        weather_data_list[i] = new ForecastWeatherData(location, week_days[(current_day_index + i - 1) % 7]);
     }
 
     // set list to the 8 weather data objects
@@ -61,6 +69,16 @@ size_t WeatherDataSet::write_memory_callback(void *contents, size_t size, size_t
 }
 
 int WeatherDataSet::update_data() {
+    time_t current_time = time(0);
+    struct tm* local_time = localtime(&current_time);
+    int current_day_index = local_time->tm_wday;
+
+    if (local_time->tm_wday != current_day_index) {
+        for (int i = 2; i < 8; i++) {
+            weather_data_list[i]->set_day(week_days[(current_day_index + i - 1) % 7]);
+        }
+    }
+
     CURL* curl = curl_easy_init();
     if (curl == NULL) {
         cout << "HTTP request failed" << endl;
@@ -69,8 +87,9 @@ int WeatherDataSet::update_data() {
     CURLcode result;
     string data_literal;
 
-    curl_easy_setopt(curl, CURLOPT_URL, "api.openweathermap.org/data/2.5/onecall?lat=-34.921230&lon=138.599503&exclude=hourly&units=metric&appid=103423645f4a2cd6fd178dc0d3da0097");
-
+    string url = "api.openweathermap.org/data/2.5/onecall?lat=" + to_string(location.x) + "&lon="
+                    + to_string(location.y) + "&exclude=hourly&units=metric&appid=103423645f4a2cd6fd178dc0d3da0097";
+    curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_memory_callback);
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, &data_literal);
 
@@ -84,11 +103,7 @@ int WeatherDataSet::update_data() {
 
     curl_easy_cleanup(curl);
 
-    cout << data_literal << endl;
-
     json data = json::parse(data_literal);
-
-    cout << endl << endl << "**parsed:" << data["list"][0] << endl;
 
     weather_data_list[0]->update_data(data["current"]);
 

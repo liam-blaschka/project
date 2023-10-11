@@ -5,15 +5,19 @@
 #include "CurrentWeatherData.h"
 #include "ForecastWeatherData.h"
 
+#include "Coordinates.h"
+
 using namespace std;
 
 class WeatherDataSet {
     private:
         WeatherData** weather_data_list;
         int count;
-        string location;
+        int current_day_index;
+        string week_days[7] = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
+        Coordinates location;
     public:
-        WeatherDataSet(string location);
+        WeatherDataSet(Coordinates location);
         void add_weather_data(WeatherData* data);
         void remove_weather_data(int index);
         int get_count();
