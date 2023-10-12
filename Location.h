@@ -3,18 +3,20 @@
 
 #include <string>
 #include "Coordinates.h"
+#include <SFML/Graphics.hpp>
 
 using namespace std;
+using namespace sf;
 
 class Location {
     private:
         Coordinates coordinates;
         string location;
-        // Text text;
+        Text text;
         bool is_activated;
     public:
         Location();
-        Location(string location, Coordinates coordinates);
+        Location(string location, Coordinates coordinates, Font& font);
         string get_string();
         void set_string(string location);
         Coordinates get_coordinates();

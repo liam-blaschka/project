@@ -1,17 +1,19 @@
 #include "Location.h"
 #include "Coordinates.h"
 #include <string>
+#include <SFML/Graphics.hpp>
 
 using namespace std;
 
-Location::Location(string location, Coordinates coordinates) {
+Location::Location(string location, Coordinates coordinates, Font& font) {
     // make text graphic
 
     this->location = location;
     this->coordinates = coordinates;
+    // text
 }
 
-Location::Location():Location("", Coordinates()) {}
+Location::Location() {}
 
 string Location::get_string() {
     return location;
