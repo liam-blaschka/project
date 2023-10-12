@@ -7,5 +7,4 @@
 !*/
 !.gitignore
 !README.md
-!Makefile
 !*.h
