@@ -17,7 +17,7 @@ using namespace sf;
 
 int main() {
     RenderWindow window(VideoMode(550, 325), "Weather", Style::Titlebar | Style::Close);
-    window.setVerticalSyncEnabled(true);
+    window.setFramerateLimit(60);
 
     User user = User();
     string user_location_string = user.get_location_string();
