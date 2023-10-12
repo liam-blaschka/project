@@ -54,6 +54,10 @@ int WeatherDataSet::get_count() {
     return count;
 }
 
+void WeatherDataSet::set_location(Coordinates location) {
+    this->location = location;
+}
+
 // https://www.youtube.com/watch?v=mJVchgjkgL8
 // https://www.youtube.com/watch?v=mJVchgjkgL8&t=321s
 // https://www.appsloveworld.com/c/100/2/c-libcurl-get-output-into-a-string

@@ -23,6 +23,7 @@ class WeatherDataSet {
         int get_count();
         static size_t write_memory_callback(void *contents, size_t size, size_t nmemb, string *str);
         int update_data();
+        void set_location(Coordinates location);
         // void draw(RenderTarget& target, RenderStates states);
         ~WeatherDataSet();
 };
