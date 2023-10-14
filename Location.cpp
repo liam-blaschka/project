@@ -5,12 +5,12 @@
 
 using namespace std;
 
-Location::Location(string location, Coordinates coordinates, Font& font) {
-    // make text graphic
-
+Location::Location(Font& font, string location, Coordinates coordinates) {
     this->location = location;
     this->coordinates = coordinates;
-    // text
+
+    text.setFont(font);
+    text.setString(location);
 }
 
 Location::Location() {}
@@ -33,4 +33,8 @@ void Location::set_coordinates(Coordinates coordinates) {
 
 void Location::set_is_activated(bool is_activated) {
     this->is_activated = is_activated;
+}
+
+void Location::draw(RenderTarget& target, RenderStates states) const {
+    target.draw(text);
 }

@@ -23,6 +23,17 @@ int main() {
     string user_location_string = user.get_location_string();
     Coordinates user_coordinates = user.get_location_coordinates();
 
+    Font font;
+    font.loadFromFile("calibri-regular.ttf");
+    // Text text;
+    // text.setFont(font);
+    // text.setString ("Weather Application");
+    // text.setFillColor(Color::White);
+    // text.setCharacterSize(35);
+    // text.setStyle(Text::Bold)
+
+    Location location(font, user_location_string, user_coordinates);
+
     WeatherDataSet weather_data_set(user_coordinates);
 
     int result = weather_data_set.update_data();
@@ -36,6 +47,9 @@ int main() {
         while (window.pollEvent(event)) {
             if (event.type == Event::Closed) {
                 window.close();
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
+                    window.close();
+                }
             }
         }
         
@@ -54,7 +68,9 @@ int main() {
             start = time(0);
         }
 
-        window.clear(sf::Color(135, 206, 235));
+        window.clear(Color(135, 206, 235));
+        window.draw(location);
+        // window.draw(text);
         window.display();
     }
 
