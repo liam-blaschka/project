@@ -1,5 +1,6 @@
 #include "LocationList.h"
 #include "Location.h"
+#include <SFML/Graphics.hpp>
 #include  <string>
 
 using namespace std;
@@ -61,6 +62,12 @@ string LocationList::get_string(int index) {
 
 void LocationList::set_is_activated(int index, bool is_activated) {
     locations[index].set_is_activated(is_activated);
+}
+
+void LocationList::draw(RenderTarget& target, RenderStates states) const {
+    for (int i = 0; i < count; i++) {
+        target.draw(locations[i]);
+    }
 }
 
 LocationList::~LocationList() {

@@ -3,7 +3,7 @@
 
 Graphic::Graphic() {}
 
-Graphic::Graphic(Font& font) {
+Graphic::Graphic(Font& font, Vector2f position) {
     this->font = font;
 }
 

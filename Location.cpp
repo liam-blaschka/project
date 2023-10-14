@@ -5,12 +5,14 @@
 
 using namespace std;
 
-Location::Location(Font& font, string location, Coordinates coordinates) {
+Location::Location(Font& font, Vector2f position, string location, Coordinates coordinates) {
     this->location = location;
     this->coordinates = coordinates;
 
     text.setFont(font);
     text.setString(location);
+    text.setFillColor(Color::White);
+    text.setPosition(position);
 }
 
 Location::Location() {}
@@ -33,6 +35,15 @@ void Location::set_coordinates(Coordinates coordinates) {
 
 void Location::set_is_activated(bool is_activated) {
     this->is_activated = is_activated;
+}
+
+void Location::set_position(Vector2f position) {
+    this->position = position;
+    text.setPosition(position);
+}
+
+Vector2f Location::get_position() {
+    return position;
 }
 
 void Location::draw(RenderTarget& target, RenderStates states) const {

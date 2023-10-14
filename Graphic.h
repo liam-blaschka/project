@@ -12,7 +12,7 @@ class Graphic : public Drawable {
         FloatRect hitbox;
     public:
         Graphic();
-        Graphic(Font& font);
+        Graphic(Font& font, Vector2f position);
         Vector2f get_postion();
         void set_position(Vector2f position);
         bool contains_point(Vector2f point);

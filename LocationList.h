@@ -2,11 +2,12 @@
 #define LOCATIONLIST_H
 
 #include "Location.h"
+#include <SFML/Graphics.hpp>
 #include <string>
 
 using namespace std;
 
-class LocationList {
+class LocationList : public Drawable {
     protected:
         Location* locations;
         int size;
@@ -21,10 +22,10 @@ class LocationList {
         string get_string(int index);
         void set_is_activated(int index, bool is_activated);
         ~LocationList();
-
+        
         // int get_position(int index);
         // void set_position(int index, Vector2f position);
-        // draw(RenderTarget& target, RenderStates states);
+        void draw(RenderTarget& target, RenderStates states) const override;
 };
 
 #endif

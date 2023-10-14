@@ -17,12 +17,14 @@ class Location : public Graphic {
         bool is_activated;
     public:
         Location();
-        Location(Font& font, string location, Coordinates coordinates);
+        Location(Font& font, Vector2f position, string location, Coordinates coordinates);
         string get_string();
         void set_string(string location);
         Coordinates get_coordinates();
         void set_coordinates(Coordinates coordinates);
         void set_is_activated(bool is_activated);
+        void set_position(Vector2f position);
+        Vector2f get_position();
         void draw(RenderTarget& target, RenderStates states) const override;
 };
 

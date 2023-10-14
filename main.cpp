@@ -30,9 +30,19 @@ int main() {
     // text.setString ("Weather Application");
     // text.setFillColor(Color::White);
     // text.setCharacterSize(35);
-    // text.setStyle(Text::Bold)
+    // text.setStyle(Text::Bold);
 
-    Location location(font, user_location_string, user_coordinates);
+    Location user_location(font, Vector2f(10, 3), user_location_string, user_coordinates);
+
+    LocationList locations(8);
+    locations.add_location(Location(font, Vector2f(10, 3), "Adelaide", Coordinates(-34.921230, 138.599503)));
+    locations.add_location(Location(font, Vector2f(10, 38), "Brisbane", Coordinates(-27.470125, 153.021072)));
+    locations.add_location(Location(font, Vector2f(10, 73), "Canberra", Coordinates(-35.282001, 149.128998)));
+    locations.add_location(Location(font, Vector2f(10, 108), "Darwin", Coordinates(-12.462827, 130.841782)));
+    locations.add_location(Location(font, Vector2f(10, 143), "Hobart", Coordinates(-42.880554, 147.324997)));
+    locations.add_location(Location(font, Vector2f(10, 178), "Melbourne", Coordinates(-37.840935, 144.946457)));
+    locations.add_location(Location(font, Vector2f(10, 213), "Perth", Coordinates(-31.953512, 115.857048)));
+    locations.add_location(Location(font, Vector2f(10, 248), "Sydney", Coordinates(-33.865143, 151.209900)));
 
     WeatherDataSet weather_data_set(user_coordinates);
 
@@ -69,8 +79,10 @@ int main() {
         }
 
         window.clear(Color(135, 206, 235));
-        window.draw(location);
         // window.draw(text);
+
+        window.draw(locations);
+
         window.display();
     }
 
