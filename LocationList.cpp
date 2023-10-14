@@ -1,7 +1,7 @@
 #include "LocationList.h"
 #include "Location.h"
 #include <SFML/Graphics.hpp>
-#include  <string>
+#include <string>
 
 using namespace std;
 
@@ -58,6 +58,10 @@ void LocationList::move_location(int original_index, int new_index) {
 
 string LocationList::get_string(int index) {
     return locations[index].get_string();
+}
+
+Coordinates LocationList::get_coordinates(int index) {
+    return locations[index].get_coordinates();
 }
 
 void LocationList::set_is_activated(int index, bool is_activated) {

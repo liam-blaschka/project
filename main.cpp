@@ -6,6 +6,8 @@
 #include "LocationList.h"
 #include "SavedLocations.h"
 #include "User.h"
+#include "Graphic.h"
+#include "WeatherGraphic.h"
 #include <ctime>
 #include <SFML/Graphics.hpp>
 
@@ -32,7 +34,14 @@ int main() {
     // text.setCharacterSize(35);
     // text.setStyle(Text::Bold);
 
+
+    WeatherGraphic weather_graphic(font, Vector2f(200, 150), "13d");
+
+
     Location user_location(font, Vector2f(10, 3), user_location_string, user_coordinates);
+    user_location.set_style(Text::Bold);
+
+    SavedLocations saved_locations(5, font);
 
     LocationList locations(8);
     locations.add_location(Location(font, Vector2f(10, 3), "Adelaide", Coordinates(-34.921230, 138.599503)));
@@ -50,6 +59,8 @@ int main() {
     if (result == -1) {
         return -1;
     }
+
+    string display_mode = "main";
 
     time_t start = time(0);
     while (window.isOpen()) {
@@ -82,6 +93,10 @@ int main() {
         // window.draw(text);
 
         window.draw(locations);
+
+        window.draw(user_location);
+
+        window.draw(weather_graphic);
 
         window.display();
     }

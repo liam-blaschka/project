@@ -20,6 +20,7 @@ class Location : public Graphic {
         Location(Font& font, Vector2f position, string location, Coordinates coordinates);
         string get_string();
         void set_string(string location);
+        void set_style(Uint32 style);
         Coordinates get_coordinates();
         void set_coordinates(Coordinates coordinates);
         void set_is_activated(bool is_activated);

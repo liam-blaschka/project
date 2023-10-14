@@ -25,6 +25,10 @@ void Location::set_string(string location) {
     this->location = location;
 }
 
+void Location::set_style(Uint32 style) {
+    text.setStyle(style);
+}
+
 Coordinates Location::get_coordinates() {
     return coordinates;
 }

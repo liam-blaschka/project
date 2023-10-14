@@ -1,15 +1,22 @@
 #ifndef WEATHERGRAPHIC_H
 #define WEATHERGRAPHIC_H
 
+#include "Graphic.h"
+#include <string>
 #include <SFML/Graphics.hpp>
 
 using namespace sf;
+using namespace std;
 
 class WeatherGraphic : public Graphic {
     protected:
-        sprite icon;
-        text temperature;
+        string icon_id;
+        Texture weather_icons;
+        Sprite icon;
+        Text temperatures;
      public:
-     virtual
-        
-}
+        WeatherGraphic(Font& font, Vector2f position, string icon_id);
+        virtual void draw(RenderTarget& target, RenderStates states) const;
+};
+
+#endif

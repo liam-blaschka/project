@@ -20,6 +20,7 @@ class LocationList : public Drawable {
         virtual void remove_location(int index);
         virtual void move_location(int original_index, int new_index);
         string get_string(int index);
+        Coordinates get_coordinates(int index);
         void set_is_activated(int index, bool is_activated);
         ~LocationList();
         

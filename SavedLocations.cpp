@@ -1,21 +1,42 @@
 #include "Location.h"
 #include "LocationList.h"
 #include "SavedLocations.h"
+#include "Coordinates.h"
 #include <string>
 #include <fstream>
+#include <sstream>
 
 using namespace std;
 
-SavedLocations::SavedLocations(int size):LocationList(size) {
-    ifstream file("saved_locations.txt");
+SavedLocations::SavedLocations(int size, Font& font):LocationList(size) {
+    ifstream file("saved_locations.csv");
     if (file.is_open()) {
         string line;
         while (getline(file, line)) {
-            locations[count] = Location(line);
+            string location_string;
+            Coordinates location_coordinates;
+            stringstream line_stream(line);
+            string column;
+            int i = 0;
+            while (getline(line_stream, column, ',')) {
+                switch (i) {
+                    case 0:
+                        location_string = column;
+                        break;
+                    case 1:
+                        location_coordinates.x = stod(column);
+                        break;
+                    case 2:
+                        location_coordinates.y = stod(column);
+                        break;
+                }
+                i++;
+            }
+            locations[count] = Location(font, Vector2f(10, 38 + (35 * count)), location_string, location_coordinates);
             count++;
         }
     } else {
-        ofstream file("saved_locations.txt");
+        ofstream file("saved_locations.csv");
         count = 0;
     }
     file.close();
@@ -23,8 +44,8 @@ SavedLocations::SavedLocations(int size):LocationList(size) {
 
 void SavedLocations::add_location(Location location) {
     if (count < size) {
-        ofstream file("saved_locations.txt", std::ios::app);
-        file << location.get_string() << "\n";
+        ofstream file("saved_locations.csv", std::ios::app);
+        file << location.get_string() << "," << location.get_coordinates().x << "," << location.get_coordinates().y << "\n";
         file.close();
 
         LocationList::add_location(location);
@@ -32,8 +53,8 @@ void SavedLocations::add_location(Location location) {
 }
 
 void SavedLocations::remove_location(int index) {
-    ifstream file_old("saved_locations.txt");
-    ofstream file_new("new_saved_locations.txt", std::ios::app);
+    ifstream file_old("saved_locations.csv");
+    ofstream file_new("new_saved_locations.csv", std::ios::app);
 
     string line;
     int i = 0;
@@ -48,8 +69,8 @@ void SavedLocations::remove_location(int index) {
     file_old.close();
     file_new.close();
 
-    remove("saved_locations.txt");
-    rename("new_saved_locations.txt", "saved_locations.txt");
+    remove("saved_locations.csv");
+    rename("new_saved_locations.csv", "saved_locations.csv");
 
     LocationList::remove_location(index);
 }
@@ -57,11 +78,11 @@ void SavedLocations::remove_location(int index) {
 void SavedLocations::move_location(int original_index, int new_index) {
     LocationList::move_location(original_index, new_index);
 
-    remove("saved_locations.txt");
+    remove("saved_locations.csv");
 
-    ofstream file("saved_locations.txt", std::ios::app);
+    ofstream file("saved_locations.csv", std::ios::app);
     for (int i = 0; i < count; i++) {
-        file << locations[i].get_string() << "\n";
+        file << locations[i].get_string() << "," << locations[i].get_coordinates().x << "," << locations[i].get_coordinates().y << "\n";
     }
 
     file.close();
