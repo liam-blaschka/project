@@ -25,7 +25,7 @@ WeatherDataSet::WeatherDataSet(Coordinates location, Font& font) {
     count = 8;
     weather_data_list = new WeatherData*[count];
 
-    weather_data_list[0] = new CurrentWeatherData(location, font, Vector2f(65, 20));
+    weather_data_list[0] = new CurrentWeatherData(location, font, Vector2f(60, 20));
     weather_data_list[1] = new ForecastWeatherData(location, "Today", font, Vector2f(80, 190));
     for (int i = 2; i < 8; i++) {
         weather_data_list[i] = new ForecastWeatherData(location, week_days[(current_day_index + i - 1) % 7], font, Vector2f(80, 190 + ((i - 1) * 50)));

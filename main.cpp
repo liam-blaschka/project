@@ -104,7 +104,7 @@ int main() {
             start = time(0);
         }
 
-        window.clear(Color(66, 152, 245));
+        window.clear(Color(66, 182, 245));
         // window.draw(text);
 
         if (display_mode == "main") {
