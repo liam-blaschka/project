@@ -66,13 +66,21 @@ int main() {
                 window.close();
             } else if (event.type == Event::MouseMoved) {
                 if (active_location.contains_point(Vector2f(event.mouseMove.x, event.mouseMove.y))) {
-                    active_location.set_style(Text::Bold | Text::Underlined);
+                    active_location.set_is_activated(true);
                     mouse_cursor.loadFromSystem(Cursor::Hand);
                     window.setMouseCursor(mouse_cursor);
                 } else {
-                    active_location.set_style(Text::Bold);
+                    active_location.set_is_activated(false);
                     mouse_cursor.loadFromSystem(Cursor::Arrow);
                     window.setMouseCursor(mouse_cursor);
+                }
+            } else if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left) {
+                if (active_location.contains_point(Vector2f(event.mouseButton.x, event.mouseButton.y))) {
+                    if (display_mode == "main") {
+                        display_mode = "saved_locations";
+                    } else if (display_mode == "saved_locations") {
+                        display_mode = "main";
+                    }
                 }
             }
         }

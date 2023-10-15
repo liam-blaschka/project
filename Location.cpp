@@ -15,7 +15,8 @@ Location::Location(Font& font, Vector2f position, string location, Coordinates c
     text.setFillColor(Color::White);
     text.setPosition(position);
 
-    hitbox = FloatRect(Vector2f(position.x, position.y + 10), text.getGlobalBounds().getSize());
+    FloatRect text_bounds = text.getGlobalBounds();
+    hitbox = FloatRect(Vector2f(position.x, position.y + 10), text_bounds.getSize());
 
     // hitbox_outline = RectangleShape(text.getGlobalBounds().getSize());
     // hitbox_outline.setPosition(position.x, position.y + 10);
@@ -33,8 +34,10 @@ void Location::set_string(string location) {
 }
 
 void Location::set_style(Uint32 style) {
+    text_style = style;
     text.setStyle(style);
-    hitbox = FloatRect(Vector2f(position.x, position.y + 10), text.getGlobalBounds().getSize());
+    FloatRect text_bounds = text.getGlobalBounds();
+    hitbox = FloatRect(Vector2f(position.x, position.y + 10), text_bounds.getSize());
 
     // hitbox_outline = RectangleShape(text.getGlobalBounds().getSize());
     // hitbox_outline.setPosition(position.x, position.y + 10);
@@ -51,6 +54,11 @@ void Location::set_coordinates(Coordinates coordinates) {
 
 void Location::set_is_activated(bool is_activated) {
     this->is_activated = is_activated;
+    if (is_activated) {
+        text.setStyle(text_style | Text::Underlined);
+    } else {
+        text.setStyle(text_style);
+    }
 }
 
 void Location::set_position(Vector2f position) {

@@ -22,11 +22,11 @@ class LocationList : public Drawable {
         string get_string(int index);
         Coordinates get_coordinates(int index);
         void set_is_activated(int index, bool is_activated);
+        void draw(RenderTarget& target, RenderStates states) const override;
         ~LocationList();
         
         // int get_position(int index);
         // void set_position(int index, Vector2f position);
-        void draw(RenderTarget& target, RenderStates states) const override;
 };
 
 #endif

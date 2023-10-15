@@ -14,6 +14,7 @@ class Location : public Graphic {
         Coordinates coordinates;
         string location;
         Text text;
+        Uint32 text_style;
         bool is_activated;
         Vector2f position;
     public:
