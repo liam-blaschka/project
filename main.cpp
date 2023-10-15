@@ -29,6 +29,8 @@ int main() {
 
     Font font;
     font.loadFromFile("calibri-regular.ttf");
+
+
     // Text text;
     // text.setFont(font);
     // text.setString ("Weather Application");
@@ -37,9 +39,18 @@ int main() {
     // text.setStyle(Text::Bold);
 
 
-    CurrentWeatherGraphic current_weather_graphic(font, Vector2f(65, 20), "01d", 32);
+    // CurrentWeatherGraphic current_weather_graphic(font, Vector2f(65, 20), "01d", 32);
 
-    ForecastWeatherGraphic forecast_graphic(font, Vector2f(70, 200), "01d", 16, 18, 0, "Today");
+    // int count = 7;
+    // ForecastWeatherGraphic forecast_graphic[7] = {
+    //     ForecastWeatherGraphic(font, Vector2f(80, 190), "01d", 16, 18, 0, "Today"),
+    //     ForecastWeatherGraphic(font, Vector2f(80, 240), "02d", 16, 18, 0, "Mon"),
+    //     ForecastWeatherGraphic(font, Vector2f(80, 290), "03d", 16, 18, 0, "Tue"),
+    //     ForecastWeatherGraphic(font, Vector2f(80, 340), "", 16, 18, 0, "Wed"),
+    //     ForecastWeatherGraphic(font, Vector2f(80, 390), "10d", 16, 18, 0, "Thu"),
+    //     ForecastWeatherGraphic(font, Vector2f(80, 440), "50n", 16, 18, 0, "Fri"),
+    //     ForecastWeatherGraphic(font, Vector2f(80, 490), "", 16, 18, 0, "Sat")
+    // };
 
 
     Location user_location(font, Vector2f(10, 3), user_location_string, user_coordinates);
@@ -57,7 +68,7 @@ int main() {
     locations.add_location(Location(font, Vector2f(10, 213), "Perth", Coordinates(-31.953512, 115.857048)));
     locations.add_location(Location(font, Vector2f(10, 248), "Sydney", Coordinates(-33.865143, 151.209900)));
 
-    WeatherDataSet weather_data_set(user_coordinates);
+    WeatherDataSet weather_data_set(user_coordinates, font);
 
     int result = weather_data_set.update_data();
     if (result == -1) {
@@ -79,7 +90,7 @@ int main() {
         }
         
         if (difftime(time(0), start) >= 30) {
-            cout << endl;
+            cout << "refreshed" << endl;
             user.update_location();
             if (user.get_location_string() != user_location_string) {
                 user_location_string = user.get_location_string();
@@ -93,17 +104,20 @@ int main() {
             start = time(0);
         }
 
-        window.clear(Color(135, 206, 235));
+        window.clear(Color(66, 152, 245));
         // window.draw(text);
 
         if (display_mode == "main") {
             window.draw(user_location);
+            window.draw(weather_data_set);
         } else if (display_mode == "locations") {
             window.draw(locations);
         }
 
-        window.draw(current_weather_graphic);
-        window.draw(forecast_graphic);
+        // window.draw(current_weather_graphic);
+        // for (int i = 0; i < count; i++) {
+        //     window.draw(forecast_graphic[i]);
+        // }
 
         window.display();
     }

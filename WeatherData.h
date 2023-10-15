@@ -1,22 +1,23 @@
 #ifndef WEATHERDATA_H
 #define WEATHERDATA_H
 
+#include "Coordinates.h"
 #include <string>
 #include <nlohmann/json.hpp>
+#include <SFML/Graphics.hpp>
 
-#include "Coordinates.h"
-
+using namespace sf;
 using namespace std;
 using json = nlohmann::json;
 
-class WeatherData {
+class WeatherData : public Drawable {
     protected:
-        string conditions;
+        string icon_id;
         Coordinates location;
 
     public:
         WeatherData(Coordinates location);
-        string get_conditions();
+        string get_icon_id();
         virtual void update_data(json data) = 0;
 
         virtual int get_temperature() { return 0; }
@@ -29,10 +30,8 @@ class WeatherData {
         virtual void set_min_temperature(int min_temperature) {}
         virtual string get_day() { return ""; }
         virtual void set_day(string day) {}
-
+        virtual void draw(RenderTarget& target, RenderStates states) const = 0;
         virtual ~WeatherData() = 0;
-
-        virtual void display() = 0;
 };
 
 #endif

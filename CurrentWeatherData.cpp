@@ -3,14 +3,17 @@
 #include <string>
 #include <math.h>
 #include <nlohmann/json.hpp>
-
 #include "Coordinates.h"
+#include <SFML/Graphics.hpp>
+
 #include <iostream>
 
 using namespace std;
 using json = nlohmann::json;
 
-CurrentWeatherData::CurrentWeatherData(Coordinates location):WeatherData(location) {}
+CurrentWeatherData::CurrentWeatherData(Coordinates location, Font& font, Vector2f position):WeatherData(location) {
+    graphic = CurrentWeatherGraphic(font, position);
+}
 
 int CurrentWeatherData::get_temperature() {
     return temperature;
@@ -21,12 +24,12 @@ void CurrentWeatherData::set_temperature(int temperature) {
 }
 
 void CurrentWeatherData::update_data(json data) {
-    conditions = data["weather"][0]["main"];
+    icon_id = data["weather"][0]["icon"];
     temperature = round(float(data["temp"]));
+    graphic.set_icon(icon_id);
+    graphic.set_temperature(temperature);
 }
 
-
-
-void CurrentWeatherData::display() {
-    cout << conditions << ", " << temperature << endl;
+void CurrentWeatherData::draw(RenderTarget& target, RenderStates states) const {
+    target.draw(graphic);
 }

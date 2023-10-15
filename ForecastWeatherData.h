@@ -2,11 +2,13 @@
 #define FORECASTWEATHERDATA_H
 
 #include "WeatherData.h"
+#include "ForecastWeatherGraphic.h"
+#include "Coordinates.h"
 #include <string>
 #include <nlohmann/json.hpp>
+#include <SFML/Graphics.hpp>
 
-#include "Coordinates.h"
-
+using namespace sf;
 using namespace std;
 
 class ForecastWeatherData : public WeatherData {
@@ -15,8 +17,9 @@ class ForecastWeatherData : public WeatherData {
         int min_temperature;
         int rain_chance;
         string day;
+        ForecastWeatherGraphic graphic;
     public:
-        ForecastWeatherData(Coordinates location, string day);
+        ForecastWeatherData(Coordinates location, string day, Font& font, Vector2f position);
         int get_rain_chance() override;
         void set_rain_chance(int rain_chance) override;
         int get_max_temperature() override;
@@ -26,10 +29,8 @@ class ForecastWeatherData : public WeatherData {
         string get_day() override;
         void set_day(string day) override;
         void update_data(json data) override;
+        void draw(RenderTarget& target, RenderStates states) const override;
         ~ForecastWeatherData() {}
-
-
-        void display() override;
 };
 
 #endif

@@ -5,6 +5,7 @@
 #include <string>
 #include <curl/curl.h>
 #include <nlohmann/json.hpp>
+#include <SFML/Graphics.hpp>
 #include <ctime>
 
 #include "Coordinates.h"
@@ -14,7 +15,7 @@
 using namespace std;
 using json = nlohmann::json;
 
-WeatherDataSet::WeatherDataSet(Coordinates location) {
+WeatherDataSet::WeatherDataSet(Coordinates location, Font& font) {
     this->location = location;
 
     time_t current_time = time(0);
@@ -24,10 +25,10 @@ WeatherDataSet::WeatherDataSet(Coordinates location) {
     count = 8;
     weather_data_list = new WeatherData*[count];
 
-    weather_data_list[0] = new CurrentWeatherData(location);
-    weather_data_list[1] = new ForecastWeatherData(location, "Today");
+    weather_data_list[0] = new CurrentWeatherData(location, font, Vector2f(65, 20));
+    weather_data_list[1] = new ForecastWeatherData(location, "Today", font, Vector2f(80, 190));
     for (int i = 2; i < 8; i++) {
-        weather_data_list[i] = new ForecastWeatherData(location, week_days[(current_day_index + i - 1) % 7]);
+        weather_data_list[i] = new ForecastWeatherData(location, week_days[(current_day_index + i - 1) % 7], font, Vector2f(80, 190 + ((i - 1) * 50)));
     }
 
     // set list to the 8 weather data objects
@@ -115,18 +116,18 @@ int WeatherDataSet::update_data() {
         weather_data_list[i]->update_data(data["daily"][i - 1]);
     }
 
-
-    for (int i = 0; i < count; i++) {
-        weather_data_list[i]->display();
-    }
-    
-
     // write prettified JSON to another file
     std::ofstream o("pretty.json");
     o << std::setw(4) << data << std::endl;
     o.close();
 
     return 0;
+}
+
+void WeatherDataSet::draw(RenderTarget& target, RenderStates states) const {
+    for (int i = 0; i < count; i++) {
+        target.draw(*weather_data_list[i]);
+    }
 }
 
 WeatherDataSet::~WeatherDataSet() {

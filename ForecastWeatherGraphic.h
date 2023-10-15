@@ -11,10 +11,22 @@ using namespace std;
 
 class ForecastWeatherGraphic : public WeatherGraphic {
     private:
+        int min_temperature;
+        int max_temperature;
+        int rain_chance;
+        string day;
         Sprite rain_chance_text;
         Text day_text;
     public:
-        ForecastWeatherGraphic(Font& font, Vector2f position, string icon_id, int min_temperature,int max_temperature, int rain_chance, string day);
+        ForecastWeatherGraphic();
+        ForecastWeatherGraphic(Font& font, Vector2f position, string day);
+        void set_icon(string icon_id) override;
+        int get_min_temperature();
+        void set_temperatures(int min_temperature, int max_temperature);
+        int get_rain_chance();
+        void set_rain_chance(int rain_chance);
+        string get_day();
+        void set_day(string day);
         void draw(RenderTarget&, RenderStates states) const override;
 };
 

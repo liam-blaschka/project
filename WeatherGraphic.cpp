@@ -6,12 +6,36 @@
 using namespace sf;
 using namespace std;
 
-WeatherGraphic::WeatherGraphic(Font& font, Vector2f position, string icon_id):Graphic(font, position) {
-    this->icon_id = icon_id;
+WeatherGraphic::WeatherGraphic() {}
 
-    weather_icons.loadFromFile("Untitled.png");
+WeatherGraphic::WeatherGraphic(Font& font, Vector2f position):Graphic(font, position) {
+    this->font = font;
+    this->position = position;
+    weather_icons.loadFromFile("weather_icons.png");
     weather_icons.setSmooth(true);
 
+    icon.setPosition(position);
+}
+
+void WeatherGraphic::update_icon() {
+    
+}
+
+Vector2f WeatherGraphic::get_position() {
+    return position;
+}
+
+void WeatherGraphic::set_position(Vector2f position) {
+    this->position = position;
+    icon.setPosition(position);
+}
+
+string WeatherGraphic::get_icon_id() {
+    return icon_id;
+}
+
+void WeatherGraphic::set_icon(string icon_id) {
+    this->icon_id = icon_id;
     if (icon_id == "01d" || icon_id == "01n") {
         // sunny
         icon = Sprite(weather_icons, IntRect(0, 196, 196, 196));
@@ -26,22 +50,20 @@ WeatherGraphic::WeatherGraphic(Font& font, Vector2f position, string icon_id):Gr
         icon = Sprite(weather_icons, IntRect(196, 0, 196, 196));
     } else if (icon_id == "10d" || icon_id == "10n") {
         // rain
-        icon = Sprite(weather_icons, IntRect(512, 384, 196, 196));
+        icon = Sprite(weather_icons, IntRect(768, 384, 196, 196));
     } else if (icon_id == "11d" || icon_id == "11n") {
         // thunderstorm
-        icon = Sprite(weather_icons, IntRect(512, 0, 196, 196));
+        icon = Sprite(weather_icons, IntRect(768, 0, 196, 196));
     } else if (icon_id == "13d" || icon_id == "13n") {
         // snow
         icon = Sprite(weather_icons, IntRect(196, 576, 196, 196));
     } else if (icon_id == "50d" || icon_id == "50n") {
         // mist
-        icon = Sprite(weather_icons, IntRect(576, 196, 196, 196));
+        icon = Sprite(weather_icons, IntRect(768, 196, 196, 196));
     } else {
         // unknown
-        icon = Sprite(weather_icons, IntRect(512, 576, 196, 196));
+        icon = Sprite(weather_icons, IntRect(768, 576, 196, 196));
     }
-
-    icon.setPosition(position);
 }
 
 // for testing
