@@ -20,7 +20,7 @@ using namespace std;
 using namespace sf;
 
 int main() {
-    RenderWindow window(VideoMode(325, 550), "Weather", Style::Titlebar | Style::Close);
+    RenderWindow window(VideoMode(375, 550), "Weather", Style::Titlebar | Style::Close);
     window.setFramerateLimit(60);
 
     User user = User();
@@ -37,9 +37,9 @@ int main() {
     // text.setStyle(Text::Bold);
 
 
-    CurrentWeatherGraphic current_weather_graphic(font, Vector2f(30, 20), "01d", 32);
+    CurrentWeatherGraphic current_weather_graphic(font, Vector2f(65, 20), "01d", 32);
 
-    ForecastWeatherGraphic forecast_graphic(font, Vector2f(30, 20), "01d", 16, 18, 0, "Today");
+    ForecastWeatherGraphic forecast_graphic(font, Vector2f(70, 200), "01d", 16, 18, 0, "Today");
 
 
     Location user_location(font, Vector2f(10, 3), user_location_string, user_coordinates);
