@@ -65,6 +65,8 @@ void Location::set_is_activated(bool is_activated) {
 void Location::set_position(Vector2f position) {
     this->position = position;
     text.setPosition(position);
+    FloatRect text_bounds = text.getGlobalBounds();
+    hitbox = FloatRect(position.x, position.y + 10, text_bounds.width, text_bounds.height);
 }
 
 Vector2f Location::get_position() {

@@ -32,7 +32,7 @@ SavedLocations::SavedLocations(int size, Font& font):LocationList(size) {
                 }
                 i++;
             }
-            locations[count] = Location(font, Vector2f(10, 38 + (35 * count)), location_string, location_coordinates);
+            locations[count] = Location(font, Vector2f(10, 70 + (35 * count)), location_string, location_coordinates);
             count++;
         }
     } else {
@@ -40,6 +40,8 @@ SavedLocations::SavedLocations(int size, Font& font):LocationList(size) {
         count = 0;
     }
     file.close();
+
+    position_mode = 0;
 }
 
 void SavedLocations::add_location(Location location) {
@@ -86,4 +88,19 @@ void SavedLocations::move_location(int original_index, int new_index) {
     }
 
     file.close();
+}
+
+void SavedLocations::set_position_mode(int position_mode) {
+    if (this->position_mode != position_mode) {
+        this->position_mode = position_mode;
+        if (position_mode == 0) {
+            for (int i = 0 ; i < count; i++) {
+                locations[i].set_position(Vector2f(10, 70 + (35 * i)));
+            }
+        } else if (position_mode == 1) {
+            for (int i = 0 ; i < count; i++) {
+                locations[i].set_position(Vector2f(10, 105 + (35 * i)));
+            }
+        }
+    }
 }
