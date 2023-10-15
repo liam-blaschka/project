@@ -8,11 +8,18 @@ using namespace std;
 Location::Location(Font& font, Vector2f position, string location, Coordinates coordinates) {
     this->location = location;
     this->coordinates = coordinates;
+    this->position = position;
 
     text.setFont(font);
     text.setString(location);
     text.setFillColor(Color::White);
     text.setPosition(position);
+
+    hitbox = FloatRect(Vector2f(position.x, position.y + 10), text.getGlobalBounds().getSize());
+
+    // hitbox_outline = RectangleShape(text.getGlobalBounds().getSize());
+    // hitbox_outline.setPosition(position.x, position.y + 10);
+    // hitbox_outline.setFillColor(Color::Black);
 }
 
 Location::Location() {}
@@ -27,6 +34,11 @@ void Location::set_string(string location) {
 
 void Location::set_style(Uint32 style) {
     text.setStyle(style);
+    hitbox = FloatRect(Vector2f(position.x, position.y + 10), text.getGlobalBounds().getSize());
+
+    // hitbox_outline = RectangleShape(text.getGlobalBounds().getSize());
+    // hitbox_outline.setPosition(position.x, position.y + 10);
+    // hitbox_outline.setFillColor(Color::Black);
 }
 
 Coordinates Location::get_coordinates() {
@@ -51,5 +63,6 @@ Vector2f Location::get_position() {
 }
 
 void Location::draw(RenderTarget& target, RenderStates states) const {
+    // target.draw(hitbox_outline);
     target.draw(text);
 }

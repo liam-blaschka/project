@@ -23,6 +23,8 @@ int main() {
     RenderWindow window(VideoMode(375, 550), "Weather", Style::Titlebar | Style::Close);
     window.setFramerateLimit(60);
 
+    Cursor mouse_cursor;
+
     User user = User();
     string user_location_string = user.get_location_string();
     Coordinates user_coordinates = user.get_location_coordinates();
@@ -30,31 +32,8 @@ int main() {
     Font font;
     font.loadFromFile("calibri-regular.ttf");
 
-
-    // Text text;
-    // text.setFont(font);
-    // text.setString ("Weather Application");
-    // text.setFillColor(Color::White);
-    // text.setCharacterSize(35);
-    // text.setStyle(Text::Bold);
-
-
-    // CurrentWeatherGraphic current_weather_graphic(font, Vector2f(65, 20), "01d", 32);
-
-    // int count = 7;
-    // ForecastWeatherGraphic forecast_graphic[7] = {
-    //     ForecastWeatherGraphic(font, Vector2f(80, 190), "01d", 16, 18, 0, "Today"),
-    //     ForecastWeatherGraphic(font, Vector2f(80, 240), "02d", 16, 18, 0, "Mon"),
-    //     ForecastWeatherGraphic(font, Vector2f(80, 290), "03d", 16, 18, 0, "Tue"),
-    //     ForecastWeatherGraphic(font, Vector2f(80, 340), "", 16, 18, 0, "Wed"),
-    //     ForecastWeatherGraphic(font, Vector2f(80, 390), "10d", 16, 18, 0, "Thu"),
-    //     ForecastWeatherGraphic(font, Vector2f(80, 440), "50n", 16, 18, 0, "Fri"),
-    //     ForecastWeatherGraphic(font, Vector2f(80, 490), "", 16, 18, 0, "Sat")
-    // };
-
-
-    Location user_location(font, Vector2f(10, 3), user_location_string, user_coordinates);
-    user_location.set_style(Text::Bold);
+    Location active_location(font, Vector2f(10, 3), user_location_string, user_coordinates);
+    active_location.set_style(Text::Bold);
 
     SavedLocations saved_locations(5, font);
 
@@ -83,13 +62,22 @@ int main() {
         while (window.pollEvent(event)) {
             if (event.type == Event::Closed) {
                 window.close();
-                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
-                    window.close();
+            } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
+                window.close();
+            } else if (event.type == Event::MouseMoved) {
+                if (active_location.contains_point(Vector2f(event.mouseMove.x, event.mouseMove.y))) {
+                    active_location.set_style(Text::Bold | Text::Underlined);
+                    mouse_cursor.loadFromSystem(Cursor::Hand);
+                    window.setMouseCursor(mouse_cursor);
+                } else {
+                    active_location.set_style(Text::Bold);
+                    mouse_cursor.loadFromSystem(Cursor::Arrow);
+                    window.setMouseCursor(mouse_cursor);
                 }
             }
         }
-        
-        if (difftime(time(0), start) >= 30) {
+
+        if (display_mode == "main" && difftime(time(0), start) >= 30) {
             cout << "refreshed" << endl;
             user.update_location();
             if (user.get_location_string() != user_location_string) {
@@ -105,19 +93,15 @@ int main() {
         }
 
         window.clear(Color(66, 182, 245));
-        // window.draw(text);
 
+        window.draw(active_location);
         if (display_mode == "main") {
-            window.draw(user_location);
             window.draw(weather_data_set);
+        } else if (display_mode == "saved_locations") {
+            window.draw(saved_locations);
         } else if (display_mode == "locations") {
             window.draw(locations);
         }
-
-        // window.draw(current_weather_graphic);
-        // for (int i = 0; i < count; i++) {
-        //     window.draw(forecast_graphic[i]);
-        // }
 
         window.display();
     }

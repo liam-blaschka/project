@@ -11,6 +11,8 @@ class Graphic : public Drawable {
         Font font;
         Vector2f position;
         FloatRect hitbox;
+
+        RectangleShape hitbox_outline;
     public:
         Graphic();
         Graphic(Font& font, Vector2f position);

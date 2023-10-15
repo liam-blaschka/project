@@ -15,6 +15,7 @@ class Location : public Graphic {
         string location;
         Text text;
         bool is_activated;
+        Vector2f position;
     public:
         Location();
         Location(Font& font, Vector2f position, string location, Coordinates coordinates);
