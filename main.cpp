@@ -8,6 +8,7 @@
 #include "User.h"
 #include "Graphic.h"
 #include "WeatherGraphic.h"
+#include "CurrentWeatherGraphic.h"
 #include <ctime>
 #include <SFML/Graphics.hpp>
 
@@ -26,7 +27,8 @@ int main() {
     Coordinates user_coordinates = user.get_location_coordinates();
 
     Font font;
-    font.loadFromFile("calibri-regular.ttf");
+    font.loadFromFile("arial.ttf");
+    cout << font.hasGlyph(176);
     // Text text;
     // text.setFont(font);
     // text.setString ("Weather Application");
@@ -35,7 +37,7 @@ int main() {
     // text.setStyle(Text::Bold);
 
 
-    WeatherGraphic weather_graphic(font, Vector2f(200, 150), "13d");
+    CurrentWeatherGraphic weather_graphic(font, Vector2f(200, 150), "13d", 32);
 
 
     Location user_location(font, Vector2f(10, 3), user_location_string, user_coordinates);
@@ -92,9 +94,11 @@ int main() {
         window.clear(Color(135, 206, 235));
         // window.draw(text);
 
-        window.draw(locations);
-
-        window.draw(user_location);
+        if (display_mode == "main") {
+            window.draw(user_location);
+        } else if (display_mode == "locations") {
+            window.draw(locations);
+        }
 
         window.draw(weather_graphic);
 

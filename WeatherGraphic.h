@@ -13,7 +13,7 @@ class WeatherGraphic : public Graphic {
         string icon_id;
         Texture weather_icons;
         Sprite icon;
-        Text temperatures;
+        Text temperature_text;
      public:
         WeatherGraphic(Font& font, Vector2f position, string icon_id);
         virtual void draw(RenderTarget& target, RenderStates states) const;
