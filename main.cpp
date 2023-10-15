@@ -24,6 +24,7 @@ int main() {
     window.setFramerateLimit(60);
 
     Cursor mouse_cursor;
+    string mouse_cursor_type = "arrow";
 
     User user = User();
     string user_location_string = user.get_location_string();
@@ -67,12 +68,18 @@ int main() {
             } else if (event.type == Event::MouseMoved) {
                 if (active_location.contains_point(Vector2f(event.mouseMove.x, event.mouseMove.y))) {
                     active_location.set_is_activated(true);
-                    mouse_cursor.loadFromSystem(Cursor::Hand);
-                    window.setMouseCursor(mouse_cursor);
+                    if (mouse_cursor_type != "hand") {
+                        mouse_cursor.loadFromSystem(Cursor::Hand);
+                        window.setMouseCursor(mouse_cursor);
+                        mouse_cursor_type = "hand";
+                    }
                 } else {
                     active_location.set_is_activated(false);
-                    mouse_cursor.loadFromSystem(Cursor::Arrow);
-                    window.setMouseCursor(mouse_cursor);
+                    if (mouse_cursor_type != "arrow") {
+                        mouse_cursor.loadFromSystem(Cursor::Arrow);
+                        window.setMouseCursor(mouse_cursor);
+                        mouse_cursor_type = "arrow";
+                    }
                 }
             } else if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left) {
                 if (active_location.contains_point(Vector2f(event.mouseButton.x, event.mouseButton.y))) {
