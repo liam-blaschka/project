@@ -16,8 +16,5 @@ Vector2f Graphic::get_postion() {
 }
 
 bool Graphic::contains_point(Vector2f point) {
-    if (hitbox.contains(point)) {
-        return true;
-    }
-    return false;
+    return hitbox.contains(point);
 }

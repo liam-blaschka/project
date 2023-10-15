@@ -68,6 +68,10 @@ void LocationList::set_is_activated(int index, bool is_activated) {
     locations[index].set_is_activated(is_activated);
 }
 
+bool LocationList::contains_point(int index, Vector2f point) {
+    return locations[index].contains_point(point);
+}
+
 void LocationList::draw(RenderTarget& target, RenderStates states) const {
     for (int i = 0; i < count; i++) {
         target.draw(locations[i]);

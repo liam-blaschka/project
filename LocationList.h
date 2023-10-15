@@ -22,6 +22,7 @@ class LocationList : public Drawable {
         string get_string(int index);
         Coordinates get_coordinates(int index);
         void set_is_activated(int index, bool is_activated);
+        bool contains_point(int index, Vector2f point);
         void draw(RenderTarget& target, RenderStates states) const override;
         ~LocationList();
         

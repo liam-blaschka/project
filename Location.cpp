@@ -31,6 +31,7 @@ string Location::get_string() {
 
 void Location::set_string(string location) {
     this->location = location;
+    text.setString(location);
 }
 
 void Location::set_style(Uint32 style) {
