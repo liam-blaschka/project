@@ -16,7 +16,7 @@ Location::Location(Font& font, Vector2f position, string location, Coordinates c
     text.setPosition(position);
 
     FloatRect text_bounds = text.getGlobalBounds();
-    hitbox = FloatRect(Vector2f(position.x, position.y + 10), text_bounds.getSize());
+    hitbox = FloatRect(position.x, position.y + 10, text_bounds.width, text_bounds.height);
 
     // hitbox_outline = RectangleShape(text.getGlobalBounds().getSize());
     // hitbox_outline.setPosition(position.x, position.y + 10);
@@ -37,7 +37,7 @@ void Location::set_style(Uint32 style) {
     text_style = style;
     text.setStyle(style);
     FloatRect text_bounds = text.getGlobalBounds();
-    hitbox = FloatRect(Vector2f(position.x, position.y + 10), text_bounds.getSize());
+    hitbox = FloatRect(position.x, position.y + 10, text_bounds.width, text_bounds.height);
 
     // hitbox_outline = RectangleShape(text.getGlobalBounds().getSize());
     // hitbox_outline.setPosition(position.x, position.y + 10);
