@@ -1,2 +1,0 @@
-#ifndef FORECASTWEATHER_H
-#define FORECASEWE2

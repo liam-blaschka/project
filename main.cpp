@@ -9,6 +9,7 @@
 #include "Graphic.h"
 #include "WeatherGraphic.h"
 #include "CurrentWeatherGraphic.h"
+#include "ForecastWeatherGraphic.h"
 #include <ctime>
 #include <SFML/Graphics.hpp>
 
@@ -19,7 +20,7 @@ using namespace std;
 using namespace sf;
 
 int main() {
-    RenderWindow window(VideoMode(550, 325), "Weather", Style::Titlebar | Style::Close);
+    RenderWindow window(VideoMode(325, 550), "Weather", Style::Titlebar | Style::Close);
     window.setFramerateLimit(60);
 
     User user = User();
@@ -27,8 +28,7 @@ int main() {
     Coordinates user_coordinates = user.get_location_coordinates();
 
     Font font;
-    font.loadFromFile("arial.ttf");
-    cout << font.hasGlyph(176);
+    font.loadFromFile("calibri-regular.ttf");
     // Text text;
     // text.setFont(font);
     // text.setString ("Weather Application");
@@ -37,7 +37,9 @@ int main() {
     // text.setStyle(Text::Bold);
 
 
-    CurrentWeatherGraphic weather_graphic(font, Vector2f(200, 150), "13d", 32);
+    CurrentWeatherGraphic current_weather_graphic(font, Vector2f(30, 20), "01d", 32);
+
+    ForecastWeatherGraphic forecast_graphic(font, Vector2f(30, 20), "01d", 16, 18, 0, "Today");
 
 
     Location user_location(font, Vector2f(10, 3), user_location_string, user_coordinates);
@@ -100,7 +102,8 @@ int main() {
             window.draw(locations);
         }
 
-        window.draw(weather_graphic);
+        window.draw(current_weather_graphic);
+        window.draw(forecast_graphic);
 
         window.display();
     }
