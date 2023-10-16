@@ -174,7 +174,7 @@ int main() {
                         }
                     } else {
                         // checks if the mouse is over the bin button
-                        if (saved_locations.get_count() < 5 && bin_button.contains_point(Vector2f(event.mouseMove.x, event.mouseMove.y))) {
+                        if (saved_locations.get_count() > 0 && bin_button.contains_point(Vector2f(event.mouseMove.x, event.mouseMove.y))) {
 
                             bin_button.set_is_activated(true);
                             is_graphic_activated = true;
@@ -222,6 +222,7 @@ int main() {
                     saved_locations_header.setPosition(12, 50);
                     saved_locations.set_position_mode(0);
                     add_location_button.set_position(Vector2f(8, 75 + saved_locations.get_count() * 36));
+                    bin_button.set_position(Vector2f(50, 75 + saved_locations.get_count() * 36));
                     is_user_location_active = true;
 
                     user_location.deactivate();
@@ -231,27 +232,67 @@ int main() {
                     // checks if any of the saved locations were clicked
                     for (int i = 0; i < saved_locations.get_count(); i++) {
                         if (saved_locations.contains_point(i, Vector2f(event.mouseButton.x, event.mouseButton.y))) {
-                            active_location.set_string(saved_locations.get_string(i));
-                            active_location.set_coordinates(saved_locations.get_coordinates(i));
-                            weather_data_set.set_location(saved_locations.get_coordinates(i));
+                            // if location is being removed
+                            if (is_location_delete_mode) {
+                                string removed_location = saved_locations.get_string(i);
+                                saved_locations.remove_location(i);
+                                int unhidden_index = 0;
+                                for (int j = 0; j < 8; j++) {
+                                    for (int k = 0; k < saved_locations.get_count(); k++) {
+                                        if (locations.get_string(j) == removed_location) {
+                                            locations.set_is_hidden(j, false);
+                                        }
+                                    }
+                                    if (!locations.get_is_hidden(j)) {
+                                        locations.set_position(j, Vector2f(10, 111 + (saved_locations.get_count() * 35) + (unhidden_index * 35)));
+                                        unhidden_index++;
+                                    }
+                                }
 
-                            result = weather_data_set.update_data();
-                            if (result == -1) {
-                                return -1;
+
+                                locations_background.setSize(Vector2f(150, unhidden_index * 35));
+                                locations_background.setPosition(5, 115 + saved_locations.get_count() * 35);
+                                if (is_user_location_active) {
+                                    add_location_button.set_position(Vector2f(8, 75 + saved_locations.get_count() * 36));
+                                    bin_button.set_position(Vector2f(50, 75 + saved_locations.get_count() * 36));
+                                    // adjust saved location positions
+                                    for (int j = i; j < saved_locations.get_count(); j++) {
+                                        saved_locations.set_position(i, (Vector2f(10, 75 + 35 * j)));
+                                    }
+                                }  else {
+                                    add_location_button.set_position(Vector2f(8, 110 + saved_locations.get_count() * 36));
+                                    bin_button.set_position(Vector2f(50, 110 + saved_locations.get_count() * 36));
+                                    // adjust saved location positions
+                                    for (int j = i; j < saved_locations.get_count(); j++) {
+                                        saved_locations.set_position(i, (Vector2f(10, 110 + 35 * j)));
+                                    }
+                                }
+
+                            // if location is being selected
+                            } else {
+                                active_location.set_string(saved_locations.get_string(i));
+                                active_location.set_coordinates(saved_locations.get_coordinates(i));
+                                weather_data_set.set_location(saved_locations.get_coordinates(i));
+
+                                result = weather_data_set.update_data();
+                                if (result == -1) {
+                                    return -1;
+                                }
+                                start = time(0);
+
+                                if (is_user_location_active) {
+                                    saved_locations_header.setPosition(12, 85);
+                                    saved_locations.set_position_mode(1);
+                                    add_location_button.set_position(Vector2f(8, 110 + saved_locations.get_count() * 36));
+                                    bin_button.set_position(Vector2f(50, 110 + saved_locations.get_count() * 36));
+                                    is_user_location_active = false;
+                                }
+
+                                saved_locations.deactivate(i);
+                                display_mode = "main";
+                                break;
                             }
-                            start = time(0);
-
-                            if (is_user_location_active) {
-                                saved_locations_header.setPosition(12, 85);
-                                saved_locations.set_position_mode(1);
-                                add_location_button.set_position(Vector2f(8, 110 + saved_locations.get_count() * 36));
-                                is_user_location_active = false;
-                            }
-
-                            saved_locations.deactivate(i);
-                            display_mode = "main";
                             is_graphic_clicked = true;
-                            break;
                         }
                     }
 
@@ -262,6 +303,7 @@ int main() {
                         } else {
                             display_mode = "saved_locations";
                         }
+                        is_location_delete_mode = false;
                         is_graphic_clicked = true;
                     }
 
@@ -299,10 +341,16 @@ int main() {
                                     }
                                 }
                                 locations_background.setSize(Vector2f(150, unhidden_index * 35));
-                                locations_background.setPosition(5, 75 + saved_locations.get_count() * 35 + 40);
+                                locations_background.setPosition(5, 115 + saved_locations.get_count() * 35);
 
-                                add_location_button.set_position(Vector2f(8, 75 + saved_locations.get_count() * 36));
-
+                                if (is_user_location_active) {
+                                    add_location_button.set_position(Vector2f(8, 75 + saved_locations.get_count() * 36));
+                                    bin_button.set_position(Vector2f(50, 75 + saved_locations.get_count() * 36));
+                                } else {
+                                    add_location_button.set_position(Vector2f(8, 110 + saved_locations.get_count() * 36));
+                                    bin_button.set_position(Vector2f(50, 110 + saved_locations.get_count() * 36));
+                                }
+                                
                                 is_graphic_clicked = true;
                                 break;
                             }

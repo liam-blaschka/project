@@ -91,6 +91,10 @@ void SavedLocations::move_location(int original_index, int new_index) {
     file.close();
 }
 
+int SavedLocations::get_position_mode() {
+    return position_mode;
+}
+
 void SavedLocations::set_position_mode(int position_mode) {
     if (this->position_mode != position_mode) {
         this->position_mode = position_mode;

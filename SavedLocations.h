@@ -18,6 +18,7 @@ class SavedLocations : public LocationList {
         void add_location(Location location) override;
         void remove_location(int index) override;
         void move_location(int original_index, int new_index) override;
+        int get_position_mode();
         void set_position_mode(int position_mode);
 };
 
