@@ -9,6 +9,8 @@ Location::Location(Font& font, Vector2f position, string location, Coordinates c
     this->location = location;
     this->coordinates = coordinates;
     this->position = position;
+    is_hidden = false;
+    text_style = Text::Regular;
 
     text.setFont(font);
     text.setString(location);
@@ -75,6 +77,14 @@ Vector2f Location::get_position() {
 
 FloatRect Location::get_text_bounds() {
     return text.getGlobalBounds();
+}
+
+bool Location::get_is_hidden() {
+    return is_hidden;
+}
+
+void Location::set_is_hidden(bool is_hidden) {
+    this->is_hidden = is_hidden;
 }
 
 void Location::draw(RenderTarget& target, RenderStates states) const {

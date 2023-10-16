@@ -61,16 +61,37 @@ int main() {
     add_location_icon_texture.setSmooth(true);
     Button add_location_button(font, Vector2f(8, 70 + saved_locations.get_count() * 36), Sprite(add_location_icon_texture));
 
+    int saved_locations_count = saved_locations.get_count();
     LocationList locations(8);
-    locations.add_location(Location(font, Vector2f(10, 3), "Adelaide", Coordinates(-34.921230, 138.599503)));
-    locations.add_location(Location(font, Vector2f(10, 38), "Brisbane", Coordinates(-27.470125, 153.021072)));
-    locations.add_location(Location(font, Vector2f(10, 73), "Canberra", Coordinates(-35.282001, 149.128998)));
-    locations.add_location(Location(font, Vector2f(10, 108), "Darwin", Coordinates(-12.462827, 130.841782)));
-    locations.add_location(Location(font, Vector2f(10, 143), "Hobart", Coordinates(-42.880554, 147.324997)));
-    locations.add_location(Location(font, Vector2f(10, 178), "Melbourne", Coordinates(-37.840935, 144.946457)));
-    locations.add_location(Location(font, Vector2f(10, 213), "Perth", Coordinates(-31.953512, 115.857048)));
-    locations.add_location(Location(font, Vector2f(10, 248), "Sydney", Coordinates(-33.865143, 151.209900)));
 
+    locations.add_location(Location(font, Vector2f(0, 0), "Adelaide", Coordinates(-34.921230, 138.599503)));
+    locations.add_location(Location(font, Vector2f(0, 0), "Brisbane", Coordinates(-27.470125, 153.021072)));
+    locations.add_location(Location(font, Vector2f(0, 0), "Canberra", Coordinates(-35.282001, 149.128998)));
+    locations.add_location(Location(font, Vector2f(0, 0), "Darwin", Coordinates(-12.462827, 130.841782)));
+    locations.add_location(Location(font, Vector2f(0, 0), "Hobart", Coordinates(-42.880554, 147.324997)));
+    locations.add_location(Location(font, Vector2f(0, 0), "Melbourne", Coordinates(-37.840935, 144.946457)));
+    locations.add_location(Location(font, Vector2f(0, 0), "Perth", Coordinates(-31.953512, 115.857048)));
+    locations.add_location(Location(font, Vector2f(0, 0), "Sydney", Coordinates(-33.865143, 151.209900)));
+    // loops through locations
+    int unhidden_index = 0;
+    for (int i = 0; i < 8; i++) {
+        // loops through saved_locations
+        for (int j = 0; j < saved_locations_count; j++) {
+            if (locations.get_string(i) == saved_locations.get_string(j)) {
+                locations.set_is_hidden(i, true);
+                break;
+            }
+        }
+
+        if (!locations.get_is_hidden(i)) {
+            locations.set_position(i, Vector2f(10, 106 + (saved_locations_count * 35) + (unhidden_index * 35)));
+            unhidden_index++;
+        }
+    }
+
+    RectangleShape locations_background(Vector2f(150, unhidden_index * 35));
+    locations_background.setPosition(5, 70 + saved_locations_count * 35 + 40);
+    locations_background.setFillColor(Color::Black);
 
     WeatherDataSet weather_data_set(user_coordinates, font);
 
@@ -100,7 +121,7 @@ int main() {
                     active_location.set_is_activated(false);
                 }
 
-                if (display_mode == "saved_locations") {
+                if (display_mode == "saved_locations" || display_mode == "locations") {
                     // checks if the mouse is over the user location
                     if (user_location.contains_point(Vector2f(event.mouseMove.x, event.mouseMove.y))) {
                         user_location.set_is_activated(true);
@@ -125,6 +146,20 @@ int main() {
                         is_graphic_activated = true;
                     } else {
                         add_location_button.set_is_activated(false);
+                    }
+
+                    if (display_mode == "locations") {
+                        // checks if the mouse is over any locations
+                        for (int i = 0; i < 8; i++) {
+                            if (!locations.get_is_hidden(i) && locations.contains_point(i, Vector2f(event.mouseMove.x, event.mouseMove.y))) {
+                                locations.set_is_activated(i, true);
+
+                                is_graphic_activated = true;
+                                break;
+                            } else {
+                                locations.set_is_activated(i, false);
+                            }
+                        }
                     }
                 }
 
@@ -171,7 +206,7 @@ int main() {
                     user_location.set_is_activated(false);
                     display_mode = "main";
                     is_graphic_clicked = true;
-                } else if (!is_graphic_clicked && display_mode == "saved_locations") {
+                } else if (!is_graphic_clicked && (display_mode == "saved_locations" || display_mode == "locations")) {
                     // checks if any of the saved locations were clicked
                     for (int i = 0; i < saved_locations.get_count(); i++) {
                         if (saved_locations.contains_point(i, Vector2f(event.mouseButton.x, event.mouseButton.y))) {
@@ -201,9 +236,40 @@ int main() {
 
                     // checks if add location button was clicked
                     if (!is_graphic_clicked && add_location_button.contains_point(Vector2f(event.mouseButton.x, event.mouseButton.y))) {
-                        add_location_button.set_is_activated(false);
-                        display_mode = "locations";
+                        if (display_mode == "saved_locations") {
+                            display_mode = "locations";
+                        } else {
+                            display_mode = "saved_locations";
+                        }
                         is_graphic_clicked = true;
+                    }
+
+                    if (!is_graphic_clicked && display_mode == "locations") {
+                        // checks if any of the locations were clicked
+                        for (int i = 0; i < 8; i++) {
+                            if (!locations.get_is_hidden(i) && locations.contains_point(i, Vector2f(event.mouseButton.x, event.mouseButton.y))) {
+                                locations.set_is_activated(i, false);
+                                saved_locations.add_location(locations.get_location(i));
+                                saved_locations_header.setString("Saved locations " + to_string(saved_locations.get_count()) + "/5:");
+
+                                locations.set_is_hidden(i, true);
+                                // adjust positions of other locations
+                                int unhidden_index = 0;
+                                for (int j = 0; j < 8; j++) {
+                                    if (!locations.get_is_hidden(j)) {
+                                        locations.set_position(j, Vector2f(10, 106 + (saved_locations.get_count() * 35) + (unhidden_index * 35)));
+                                        unhidden_index++;
+                                    }
+                                }
+                                locations_background.setSize(Vector2f(150, unhidden_index * 35));
+                                locations_background.setPosition(5, 70 + saved_locations.get_count() * 35 + 40);
+
+                                add_location_button.set_position(Vector2f(8, 70 + saved_locations.get_count() * 36));
+
+                                is_graphic_clicked = true;
+                                break;
+                            }
+                        }
                     }
                 }
             }
@@ -239,7 +305,7 @@ int main() {
             // if (is_user_location_active) {
             //     window.draw(user_location_icon);
             // }
-        } else if (display_mode == "saved_locations") {
+        } else if (display_mode == "saved_locations" || "locations") {
             window.draw(saved_locations_header);
             window.draw(saved_locations);
             if (!is_user_location_active) {
@@ -248,8 +314,10 @@ int main() {
             if (saved_locations.get_count() < 5) {
                 window.draw(add_location_button);
             }
-        } else if (display_mode == "locations") {
-            window.draw(locations);
+            if (display_mode == "locations") {
+                window.draw(locations_background);
+                window.draw(locations);
+            }
         }
 
         window.display();

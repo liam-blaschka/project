@@ -56,8 +56,20 @@ void LocationList::move_location(int original_index, int new_index) {
     }
 }
 
+Location LocationList::get_location(int index) {
+    return locations[index];
+}
+
 string LocationList::get_string(int index) {
     return locations[index].get_string();
+}
+
+Vector2f LocationList::get_position(int index) {
+    return locations[index].get_position();
+}
+
+void LocationList::set_position(int index, Vector2f position) {
+    locations[index].set_position(position);
 }
 
 Coordinates LocationList::get_coordinates(int index) {
@@ -72,9 +84,19 @@ bool LocationList::contains_point(int index, Vector2f point) {
     return locations[index].contains_point(point);
 }
 
+bool LocationList::get_is_hidden(int index) {
+    return locations[index].get_is_hidden();
+}
+
+void LocationList::set_is_hidden(int index, bool is_hidden) {
+    locations[index].set_is_hidden(is_hidden);
+}
+
 void LocationList::draw(RenderTarget& target, RenderStates states) const {
     for (int i = 0; i < count; i++) {
-        target.draw(locations[i]);
+        if (!locations[i].get_is_hidden()) {
+            target.draw(locations[i]);
+        }
     }
 }
 

@@ -17,6 +17,7 @@ class Location : public Graphic {
         Uint32 text_style;
         bool is_activated;
         Vector2f position;
+        bool is_hidden;
     public:
         Location();
         Location(Font& font, Vector2f position, string location, Coordinates coordinates);
@@ -29,6 +30,8 @@ class Location : public Graphic {
         void set_position(Vector2f position) override;
         Vector2f get_position();
         FloatRect get_text_bounds();
+        bool get_is_hidden();
+        void set_is_hidden(bool is_hidden);
         void draw(RenderTarget& target, RenderStates states) const override;
 };
 

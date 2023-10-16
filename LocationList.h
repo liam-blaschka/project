@@ -19,10 +19,15 @@ class LocationList : public Drawable {
         virtual void add_location(Location location);
         virtual void remove_location(int index);
         virtual void move_location(int original_index, int new_index);
+        Location get_location(int index);
         string get_string(int index);
         Coordinates get_coordinates(int index);
+        Vector2f get_position(int index);
+        void set_position(int index, Vector2f position);
         void set_is_activated(int index, bool is_activated);
         bool contains_point(int index, Vector2f point);
+        bool get_is_hidden(int index);
+        void set_is_hidden(int index, bool is_hidden);
         void draw(RenderTarget& target, RenderStates states) const override;
         ~LocationList();
         
