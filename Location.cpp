@@ -55,13 +55,14 @@ void Location::set_coordinates(Coordinates coordinates) {
     this->coordinates = coordinates;
 }
 
-void Location::set_is_activated(bool is_activated) {
-    this->is_activated = is_activated;
-    if (is_activated) {
-        text.setStyle(text_style | Text::Underlined);
-    } else {
-        text.setStyle(text_style);
-    }
+void Location::activate(Uint32 style) {
+    this->is_activated = true;
+    text.setStyle(text_style | style);
+}
+
+void Location::deactivate() {
+    this->is_activated = false;
+    text.setStyle(text_style);
 }
 
 void Location::set_position(Vector2f position) {

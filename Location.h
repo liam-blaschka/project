@@ -26,7 +26,8 @@ class Location : public Graphic {
         void set_style(Uint32 style);
         Coordinates get_coordinates();
         void set_coordinates(Coordinates coordinates);
-        void set_is_activated(bool is_activated);
+        void activate(Uint32 style);
+        void deactivate();
         void set_position(Vector2f position) override;
         Vector2f get_position();
         FloatRect get_text_bounds();

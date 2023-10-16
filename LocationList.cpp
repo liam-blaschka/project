@@ -76,8 +76,12 @@ Coordinates LocationList::get_coordinates(int index) {
     return locations[index].get_coordinates();
 }
 
-void LocationList::set_is_activated(int index, bool is_activated) {
-    locations[index].set_is_activated(is_activated);
+void LocationList::activate(int index, Uint32 style) {
+    locations[index].activate(style);
+}
+
+void LocationList::deactivate(int index) {
+    locations[index].deactivate();
 }
 
 bool LocationList::contains_point(int index, Vector2f point) {

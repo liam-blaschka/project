@@ -24,7 +24,8 @@ class LocationList : public Drawable {
         Coordinates get_coordinates(int index);
         Vector2f get_position(int index);
         void set_position(int index, Vector2f position);
-        void set_is_activated(int index, bool is_activated);
+        void activate(int index, Uint32 style);
+        void deactivate(int index);
         bool contains_point(int index, Vector2f point);
         bool get_is_hidden(int index);
         void set_is_hidden(int index, bool is_hidden);

@@ -61,6 +61,14 @@ int main() {
     add_location_icon_texture.setSmooth(true);
     Button add_location_button(font, Vector2f(8, 75 + saved_locations.get_count() * 36), Sprite(add_location_icon_texture));
 
+    // https://www.freepik.com/icon/garbage_246708
+    Texture bin_icon_texture;
+    bin_icon_texture.loadFromFile("bin_icon.png");
+    bin_icon_texture.setSmooth(true);
+    Button bin_button(font, Vector2f(50, 75 + saved_locations.get_count() * 36), Sprite(bin_icon_texture));
+
+    bool is_location_delete_mode = false;
+
     int saved_locations_count = saved_locations.get_count();
     LocationList locations(8);
 
@@ -115,33 +123,37 @@ int main() {
 
                 // checks if mouse is over the active location
                 if (active_location.contains_point(Vector2f(event.mouseMove.x, event.mouseMove.y))) {
-                    active_location.set_is_activated(true);
+                    active_location.activate(Text::Underlined);
                     is_graphic_activated = true;
                 } else {
-                    active_location.set_is_activated(false);
+                    active_location.deactivate();
                 }
 
                 if (display_mode == "saved_locations" || display_mode == "locations") {
                     // checks if the mouse is over the user location
                     if (user_location.contains_point(Vector2f(event.mouseMove.x, event.mouseMove.y))) {
-                        user_location.set_is_activated(true);
+                        user_location.activate(Text::Underlined);
                         is_graphic_activated = true;
                     } else {
-                        user_location.set_is_activated(false);
+                        user_location.deactivate();
                     }
 
                     // checks if mouse is over any saved_locations
                     for (int i = 0; i < saved_locations.get_count(); i++) {
                         if (saved_locations.contains_point(i, Vector2f(event.mouseMove.x, event.mouseMove.y))) {
-                            saved_locations.set_is_activated(i, true);
+                            if (is_location_delete_mode) {
+                                saved_locations.activate(i, Text::StrikeThrough);
+                            } else {
+                                saved_locations.activate(i, Text::Underlined);
+                            }
                             is_graphic_activated = true;
                         } else {
-                            saved_locations.set_is_activated(i, false);
+                            saved_locations.deactivate(i);
                         }
                     }
 
                     // checks if mouse is over the add location button
-                    if (add_location_button.contains_point(Vector2f(event.mouseMove.x, event.mouseMove.y))) {
+                    if (saved_locations.get_count() < 5 && add_location_button.contains_point(Vector2f(event.mouseMove.x, event.mouseMove.y))) {
                         add_location_button.set_is_activated(true);
                         is_graphic_activated = true;
                     } else {
@@ -152,13 +164,22 @@ int main() {
                         // checks if the mouse is over any locations
                         for (int i = 0; i < 8; i++) {
                             if (!locations.get_is_hidden(i) && locations.contains_point(i, Vector2f(event.mouseMove.x, event.mouseMove.y))) {
-                                locations.set_is_activated(i, true);
+                                locations.activate(i, Text::Underlined);
 
                                 is_graphic_activated = true;
                                 break;
                             } else {
-                                locations.set_is_activated(i, false);
+                                locations.deactivate(i);
                             }
+                        }
+                    } else {
+                        // checks if the mouse is over the bin button
+                        if (saved_locations.get_count() < 5 && bin_button.contains_point(Vector2f(event.mouseMove.x, event.mouseMove.y))) {
+
+                            bin_button.set_is_activated(true);
+                            is_graphic_activated = true;
+                        } else {
+                            bin_button.set_is_activated(false);
                         }
                     }
                 }
@@ -203,7 +224,7 @@ int main() {
                     add_location_button.set_position(Vector2f(8, 75 + saved_locations.get_count() * 36));
                     is_user_location_active = true;
 
-                    user_location.set_is_activated(false);
+                    user_location.deactivate();
                     display_mode = "main";
                     is_graphic_clicked = true;
                 } else if (!is_graphic_clicked && (display_mode == "saved_locations" || display_mode == "locations")) {
@@ -227,7 +248,7 @@ int main() {
                                 is_user_location_active = false;
                             }
 
-                            saved_locations.set_is_activated(i, false);
+                            saved_locations.deactivate(i);
                             display_mode = "main";
                             is_graphic_clicked = true;
                             break;
@@ -235,7 +256,7 @@ int main() {
                     }
 
                     // checks if add location button was clicked
-                    if (!is_graphic_clicked && add_location_button.contains_point(Vector2f(event.mouseButton.x, event.mouseButton.y))) {
+                    if (!is_graphic_clicked && saved_locations.get_count() < 5 && add_location_button.contains_point(Vector2f(event.mouseButton.x, event.mouseButton.y))) {
                         if (display_mode == "saved_locations") {
                             display_mode = "locations";
                         } else {
@@ -244,11 +265,23 @@ int main() {
                         is_graphic_clicked = true;
                     }
 
+                    // checks if bin button was clicked
+                    if (!is_graphic_clicked && display_mode == "saved_locations" && saved_locations.get_count() > 0) {
+                        if (bin_button.contains_point(Vector2f(event.mouseButton.x, event.mouseButton.y))) {
+                            if (is_location_delete_mode) {
+                                is_location_delete_mode = false;
+                            } else {
+                                is_location_delete_mode = true;
+                            }
+                            is_graphic_clicked = true;
+                        }
+                    }
+
                     if (!is_graphic_clicked && display_mode == "locations") {
                         // checks if any of the locations were clicked
                         for (int i = 0; i < 8; i++) {
                             if (!locations.get_is_hidden(i) && locations.contains_point(i, Vector2f(event.mouseButton.x, event.mouseButton.y))) {
-                                locations.set_is_activated(i, false);
+                                locations.deactivate(i);
                                 saved_locations.add_location(locations.get_location(i));
                                 saved_locations_header.setString("Saved locations " + to_string(saved_locations.get_count()) + "/5:");
 
@@ -317,6 +350,9 @@ int main() {
             }
             if (saved_locations.get_count() < 5) {
                 window.draw(add_location_button);
+            }
+            if (display_mode == "saved_locations" && saved_locations.get_count() > 0) {
+                window.draw(bin_button);
             }
             if (display_mode == "locations") {
                 window.draw(locations_background);
