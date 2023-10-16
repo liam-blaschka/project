@@ -25,7 +25,10 @@ ForecastWeatherGraphic::ForecastWeatherGraphic(Font& font, Vector2f position, st
 
     Texture rain_drop_texture;
     rain_drop_texture.loadFromFile("rain_drop_icon.png");
-    rain_drop_icon.
+    rain_drop_texture.setSmooth(true);
+    rain_drop_icon=Sprite(rain_drop_texture);
+    rain_drop_icon.setScale(Vector2f(0.2,0.2));
+
 }
 
 void ForecastWeatherGraphic::set_icon(string icon_id) {
@@ -68,4 +71,5 @@ void ForecastWeatherGraphic::draw(RenderTarget& target, RenderStates states) con
     target.draw(day_text);
     target.draw(temperature_text);
     target.draw(rain_chance_text);
+    target.draw(rain_drop_icon);
 }
