@@ -32,7 +32,7 @@ SavedLocations::SavedLocations(int size, Font& font):LocationList(size) {
                 }
                 i++;
             }
-            locations[count] = Location(font, Vector2f(10, 70 + (35 * count)), location_string, location_coordinates);
+            locations[count] = Location(font, Vector2f(10, 75 + (35 * count)), location_string, location_coordinates);
             count++;
         }
     } else {
@@ -49,7 +49,7 @@ void SavedLocations::add_location(Location location) {
         ofstream file("saved_locations.csv", std::ios::app);
         file << location.get_string() << "," << location.get_coordinates().x << "," << location.get_coordinates().y << "\n";
         file.close();
-        location.set_position(Vector2f(10, 70 + (35 * count)));
+        location.set_position(Vector2f(10, 75 + (35 * count)));
 
         LocationList::add_location(location);
     }
@@ -96,11 +96,11 @@ void SavedLocations::set_position_mode(int position_mode) {
         this->position_mode = position_mode;
         if (position_mode == 0) {
             for (int i = 0 ; i < count; i++) {
-                locations[i].set_position(Vector2f(10, 70 + (35 * i)));
+                locations[i].set_position(Vector2f(10, 75 + (35 * i)));
             }
         } else if (position_mode == 1) {
             for (int i = 0 ; i < count; i++) {
-                locations[i].set_position(Vector2f(10, 105 + (35 * i)));
+                locations[i].set_position(Vector2f(10, 110 + (35 * i)));
             }
         }
     }

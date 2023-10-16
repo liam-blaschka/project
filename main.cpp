@@ -59,7 +59,7 @@ int main() {
     Texture add_location_icon_texture;
     add_location_icon_texture.loadFromFile("add_icon2.png");
     add_location_icon_texture.setSmooth(true);
-    Button add_location_button(font, Vector2f(8, 70 + saved_locations.get_count() * 36), Sprite(add_location_icon_texture));
+    Button add_location_button(font, Vector2f(8, 75 + saved_locations.get_count() * 36), Sprite(add_location_icon_texture));
 
     int saved_locations_count = saved_locations.get_count();
     LocationList locations(8);
@@ -84,13 +84,13 @@ int main() {
         }
 
         if (!locations.get_is_hidden(i)) {
-            locations.set_position(i, Vector2f(10, 106 + (saved_locations_count * 35) + (unhidden_index * 35)));
+            locations.set_position(i, Vector2f(10, 111 + (saved_locations_count * 35) + (unhidden_index * 35)));
             unhidden_index++;
         }
     }
 
     RectangleShape locations_background(Vector2f(150, unhidden_index * 35));
-    locations_background.setPosition(5, 70 + saved_locations_count * 35 + 40);
+    locations_background.setPosition(5, 75 + saved_locations_count * 35 + 40);
     locations_background.setFillColor(Color::Black);
 
     WeatherDataSet weather_data_set(user_coordinates, font);
@@ -200,7 +200,7 @@ int main() {
 
                     saved_locations_header.setPosition(12, 50);
                     saved_locations.set_position_mode(0);
-                    add_location_button.set_position(Vector2f(8, 70 + saved_locations.get_count() * 36));
+                    add_location_button.set_position(Vector2f(8, 75 + saved_locations.get_count() * 36));
                     is_user_location_active = true;
 
                     user_location.set_is_activated(false);
@@ -223,7 +223,7 @@ int main() {
                             if (is_user_location_active) {
                                 saved_locations_header.setPosition(12, 85);
                                 saved_locations.set_position_mode(1);
-                                add_location_button.set_position(Vector2f(8, 105 + saved_locations.get_count() * 36));
+                                add_location_button.set_position(Vector2f(8, 110 + saved_locations.get_count() * 36));
                                 is_user_location_active = false;
                             }
 
@@ -257,14 +257,14 @@ int main() {
                                 int unhidden_index = 0;
                                 for (int j = 0; j < 8; j++) {
                                     if (!locations.get_is_hidden(j)) {
-                                        locations.set_position(j, Vector2f(10, 106 + (saved_locations.get_count() * 35) + (unhidden_index * 35)));
+                                        locations.set_position(j, Vector2f(10, 111 + (saved_locations.get_count() * 35) + (unhidden_index * 35)));
                                         unhidden_index++;
                                     }
                                 }
                                 locations_background.setSize(Vector2f(150, unhidden_index * 35));
-                                locations_background.setPosition(5, 70 + saved_locations.get_count() * 35 + 40);
+                                locations_background.setPosition(5, 75 + saved_locations.get_count() * 35 + 40);
 
-                                add_location_button.set_position(Vector2f(8, 70 + saved_locations.get_count() * 36));
+                                add_location_button.set_position(Vector2f(8, 75 + saved_locations.get_count() * 36));
 
                                 is_graphic_clicked = true;
                                 break;
