@@ -5,6 +5,7 @@ Graphic::Graphic() {}
 
 Graphic::Graphic(Font& font, Vector2f position) {
     this->font = font;
+    this->position = position;
 }
 
 void Graphic::set_position(Vector2f position) {

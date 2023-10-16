@@ -10,6 +10,7 @@
 #include "WeatherGraphic.h"
 #include "CurrentWeatherGraphic.h"
 #include "ForecastWeatherGraphic.h"
+#include "Button.h"
 #include <ctime>
 #include <SFML/Graphics.hpp>
 
@@ -38,6 +39,14 @@ int main() {
     Location active_location(font, Vector2f(10, 3), user_location_string, user_coordinates);
     bool is_user_location_active = true;
 
+    // Texture location_icon_texture;
+    // location_icon_texture.loadFromFile("location3.png");
+    // location_icon_texture.setSmooth(true);
+    // Sprite user_location_icon(location_icon_texture, IntRect(0, 0, 40, 40));
+    // FloatRect active_user_location_bounds  = active_location.get_text_bounds();
+    // // user_location_icon.setScale(1.5, 1.5);
+    // user_location_icon.setPosition(active_user_location_bounds.width + 25, active_user_location_bounds.height);
+
     active_location.set_style(Text::Bold);
 
     SavedLocations saved_locations(5, font);
@@ -46,6 +55,11 @@ int main() {
     saved_locations_header.setCharacterSize(23);
     saved_locations_header.setPosition(12, 50);
     saved_locations_header.setString("Saved locations " + to_string(saved_locations.get_count()) + "/5:");
+
+    Texture add_location_icon_texture;
+    add_location_icon_texture.loadFromFile("add_icon2.png");
+    add_location_icon_texture.setSmooth(true);
+    Button add_location_button(font, Vector2f(8, 70 + saved_locations.get_count() * 36), Sprite(add_location_icon_texture));
 
     LocationList locations(8);
     locations.add_location(Location(font, Vector2f(10, 3), "Adelaide", Coordinates(-34.921230, 138.599503)));
@@ -76,71 +90,69 @@ int main() {
             } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
                 window.close();
             } else if (event.type == Event::MouseMoved) {
-                bool is_location_activated = false;
+                bool is_graphic_activated = false;
+
+                // checks if mouse is over the active location
                 if (active_location.contains_point(Vector2f(event.mouseMove.x, event.mouseMove.y))) {
                     active_location.set_is_activated(true);
+                    is_graphic_activated = true;
+                } else {
+                    active_location.set_is_activated(false);
+                }
+
+                if (display_mode == "saved_locations") {
+                    // checks if the mouse is over the user location
+                    if (user_location.contains_point(Vector2f(event.mouseMove.x, event.mouseMove.y))) {
+                        user_location.set_is_activated(true);
+                        is_graphic_activated = true;
+                    } else {
+                        user_location.set_is_activated(false);
+                    }
+
+                    // checks if mouse is over any saved_locations
+                    for (int i = 0; i < saved_locations.get_count(); i++) {
+                        if (saved_locations.contains_point(i, Vector2f(event.mouseMove.x, event.mouseMove.y))) {
+                            saved_locations.set_is_activated(i, true);
+                            is_graphic_activated = true;
+                        } else {
+                            saved_locations.set_is_activated(i, false);
+                        }
+                    }
+
+                    // checks if mouse is over the add location button
+                    if (add_location_button.contains_point(Vector2f(event.mouseMove.x, event.mouseMove.y))) {
+                        add_location_button.set_is_activated(true);
+                        is_graphic_activated = true;
+                    } else {
+                        add_location_button.set_is_activated(false);
+                    }
+                }
+
+                if (is_graphic_activated) {
                     if (mouse_cursor_type != "hand") {
                         mouse_cursor.loadFromSystem(Cursor::Hand);
                         window.setMouseCursor(mouse_cursor);
                         mouse_cursor_type = "hand";
                     }
-                    is_location_activated = true;
-                } else {
-                    active_location.set_is_activated(false);
-                    if (mouse_cursor_type != "arrow") {
-                        mouse_cursor.loadFromSystem(Cursor::Arrow);
-                        window.setMouseCursor(mouse_cursor);
-                        mouse_cursor_type = "arrow";
-                    }
-                }
-
-                if (!is_location_activated && display_mode == "saved_locations") {
-                    if (user_location.contains_point(Vector2f(event.mouseMove.x, event.mouseMove.y))) {
-                        user_location.set_is_activated(true);
-                        if (mouse_cursor_type != "hand") {
-                            mouse_cursor.loadFromSystem(Cursor::Hand);
-                            window.setMouseCursor(mouse_cursor);
-                            mouse_cursor_type = "hand";
-                        }
-                        is_location_activated = true;
-                    } else {
-                        user_location.set_is_activated(false);
-                        if (mouse_cursor_type != "arrow") {
-                            mouse_cursor.loadFromSystem(Cursor::Arrow);
-                            window.setMouseCursor(mouse_cursor);
-                            mouse_cursor_type = "arrow";
-                        }
-                    }
-                    if (!is_location_activated) {
-                        for (int i = 0; i < saved_locations.get_count(); i++) {
-                            if (saved_locations.contains_point(i, Vector2f(event.mouseMove.x, event.mouseMove.y))) {
-                                saved_locations.set_is_activated(i, true);
-                                if (mouse_cursor_type != "hand") {
-                                    mouse_cursor.loadFromSystem(Cursor::Hand);
-                                    window.setMouseCursor(mouse_cursor);
-                                    mouse_cursor_type = "hand";
-                                }
-                                is_location_activated = true;
-                                break;
-                            } else {
-                                saved_locations.set_is_activated(i, false);
-                                if (mouse_cursor_type != "arrow") {
-                                    mouse_cursor.loadFromSystem(Cursor::Arrow);
-                                    window.setMouseCursor(mouse_cursor);
-                                    mouse_cursor_type = "arrow";
-                                }
-                            }
-                        }
-                    }
+                } else if (mouse_cursor_type != "arrow") {
+                    mouse_cursor.loadFromSystem(Cursor::Arrow);
+                    window.setMouseCursor(mouse_cursor);
+                    mouse_cursor_type = "arrow";
                 }
             } else if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left) {
+                bool is_graphic_clicked = false;
+
+                // checks if the active location was clicked
                 if (active_location.contains_point(Vector2f(event.mouseButton.x, event.mouseButton.y))) {
                     if (display_mode == "main") {
                         display_mode = "saved_locations";
                     } else if (display_mode == "saved_locations") {
                         display_mode = "main";
                     }
-                } else if (user_location.contains_point(Vector2f(event.mouseButton.x, event.mouseButton.y))) {
+                    is_graphic_clicked = true;
+
+                // checks if the user location was clicked
+                } else if (!is_graphic_clicked && user_location.contains_point(Vector2f(event.mouseButton.x, event.mouseButton.y))) {
                     active_location.set_string(user_location_string);
                     active_location.set_coordinates(user_coordinates);
                     weather_data_set.set_location(user_coordinates);
@@ -153,11 +165,14 @@ int main() {
 
                     saved_locations_header.setPosition(12, 50);
                     saved_locations.set_position_mode(0);
+                    add_location_button.set_position(Vector2f(8, 70 + saved_locations.get_count() * 36));
                     is_user_location_active = true;
 
                     user_location.set_is_activated(false);
                     display_mode = "main";
-                } else if (display_mode == "saved_locations") {
+                    is_graphic_clicked = true;
+                } else if (!is_graphic_clicked && display_mode == "saved_locations") {
+                    // checks if any of the saved locations were clicked
                     for (int i = 0; i < saved_locations.get_count(); i++) {
                         if (saved_locations.contains_point(i, Vector2f(event.mouseButton.x, event.mouseButton.y))) {
                             active_location.set_string(saved_locations.get_string(i));
@@ -173,13 +188,22 @@ int main() {
                             if (is_user_location_active) {
                                 saved_locations_header.setPosition(12, 85);
                                 saved_locations.set_position_mode(1);
+                                add_location_button.set_position(Vector2f(8, 105 + saved_locations.get_count() * 36));
                                 is_user_location_active = false;
                             }
 
                             saved_locations.set_is_activated(i, false);
                             display_mode = "main";
+                            is_graphic_clicked = true;
                             break;
                         }
+                    }
+
+                    // checks if add location button was clicked
+                    if (!is_graphic_clicked && add_location_button.contains_point(Vector2f(event.mouseButton.x, event.mouseButton.y))) {
+                        add_location_button.set_is_activated(false);
+                        display_mode = "locations";
+                        is_graphic_clicked = true;
                     }
                 }
             }
@@ -212,11 +236,17 @@ int main() {
         window.draw(active_location);
         if (display_mode == "main") {
             window.draw(weather_data_set);
+            // if (is_user_location_active) {
+            //     window.draw(user_location_icon);
+            // }
         } else if (display_mode == "saved_locations") {
             window.draw(saved_locations_header);
             window.draw(saved_locations);
             if (!is_user_location_active) {
                 window.draw(user_location);
+            }
+            if (saved_locations.get_count() < 5) {
+                window.draw(add_location_button);
             }
         } else if (display_mode == "locations") {
             window.draw(locations);

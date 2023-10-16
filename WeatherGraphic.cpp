@@ -17,10 +17,6 @@ WeatherGraphic::WeatherGraphic(Font& font, Vector2f position):Graphic(font, posi
     icon.setPosition(position);
 }
 
-void WeatherGraphic::update_icon() {
-    
-}
-
 Vector2f WeatherGraphic::get_position() {
     return position;
 }

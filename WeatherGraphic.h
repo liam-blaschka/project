@@ -19,7 +19,6 @@ class WeatherGraphic : public Graphic {
      public:
         WeatherGraphic();
         WeatherGraphic(Font& font, Vector2f position);
-        void update_icon();
         Vector2f get_position();
         virtual void set_position(Vector2f position);
         string get_icon_id();

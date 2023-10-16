@@ -26,8 +26,9 @@ class Location : public Graphic {
         Coordinates get_coordinates();
         void set_coordinates(Coordinates coordinates);
         void set_is_activated(bool is_activated);
-        void set_position(Vector2f position);
+        void set_position(Vector2f position) override;
         Vector2f get_position();
+        FloatRect get_text_bounds();
         void draw(RenderTarget& target, RenderStates states) const override;
 };
 

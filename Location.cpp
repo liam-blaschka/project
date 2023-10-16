@@ -73,6 +73,10 @@ Vector2f Location::get_position() {
     return position;
 }
 
+FloatRect Location::get_text_bounds() {
+    return text.getGlobalBounds();
+}
+
 void Location::draw(RenderTarget& target, RenderStates states) const {
     // target.draw(hitbox_outline);
     target.draw(text);
