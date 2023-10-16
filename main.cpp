@@ -21,7 +21,7 @@ using namespace std;
 using namespace sf;
 
 int main() {
-    RenderWindow window(VideoMode(375, 550), "Weather", Style::Titlebar | Style::Close);
+    RenderWindow window(VideoMode(400, 550), "Weather", Style::Titlebar | Style::Close);
     window.setFramerateLimit(60);
 
     Cursor mouse_cursor;
@@ -251,6 +251,10 @@ int main() {
                                 locations.set_is_activated(i, false);
                                 saved_locations.add_location(locations.get_location(i));
                                 saved_locations_header.setString("Saved locations " + to_string(saved_locations.get_count()) + "/5:");
+
+                                if (saved_locations.get_count() == 5) {
+                                    display_mode = "saved_locations";
+                                }
 
                                 locations.set_is_hidden(i, true);
                                 // adjust positions of other locations
