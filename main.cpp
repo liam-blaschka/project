@@ -157,11 +157,16 @@ int main() {
 
                     user_location.set_is_activated(false);
                     display_mode = "main";
-                } else {
+                } else if (display_mode == "saved_locations") {
                     for (int i = 0; i < saved_locations.get_count(); i++) {
                         if (saved_locations.contains_point(i, Vector2f(event.mouseButton.x, event.mouseButton.y))) {
                             active_location.set_string(saved_locations.get_string(i));
-                            active_location.set_coordinates(saved_locations.get_coordinates(i));
+                            if (active_location.get_string() == user_location_string) {
+                                is_user_location_active = true;
+                                active_location.set_coordinates(user_coordinates);
+                            } else {
+                                active_location.set_coordinates(saved_locations.get_coordinates(i));
+                            }
                             weather_data_set.set_location(saved_locations.get_coordinates(i));
 
                             result = weather_data_set.update_data();
