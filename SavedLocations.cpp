@@ -49,7 +49,11 @@ void SavedLocations::add_location(Location location) {
         ofstream file("saved_locations.csv", std::ios::app);
         file << location.get_string() << "," << location.get_coordinates().x << "," << location.get_coordinates().y << "\n";
         file.close();
-        location.set_position(Vector2f(10, 75 + (35 * count)));
+        if (position_mode == 0) {
+            location.set_position(Vector2f(10, 75 + (35 * count)));
+        } else {
+            location.set_position(Vector2f(10, 110 + (35 * count)));
+        }
 
         LocationList::add_location(location);
     }
