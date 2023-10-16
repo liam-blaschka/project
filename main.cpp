@@ -21,7 +21,7 @@ using namespace std;
 using namespace sf;
 
 int main() {
-    RenderWindow window(VideoMode(400, 550), "Weather", Style::Titlebar | Style::Close);
+    RenderWindow window(VideoMode(425, 550), "Weather", Style::Titlebar | Style::Close);
     window.setFramerateLimit(60);
 
     Cursor mouse_cursor;

@@ -16,9 +16,16 @@ ForecastWeatherGraphic::ForecastWeatherGraphic(Font& font, Vector2f position, st
 
     temperature_text.setFont(font);
     String degree_symbol(Uint32(176));
-    temperature_text.setString("Min: " + to_string(min_temperature) + degree_symbol + "  Max: " + to_string(max_temperature) + degree_symbol);
     temperature_text.setCharacterSize(23);
     temperature_text.setPosition(Vector2f(position.x + 65, position.y + 11));
+
+    rain_chance_text.setFont(font);
+    rain_chance_text.setCharacterSize(23);
+    rain_chance_text.setPosition(Vector2f(position.x + 280, position.y + 11));
+
+    Texture rain_drop_texture;
+    rain_drop_texture.loadFromFile("rain_drop_icon.png");
+    rain_drop_icon.
 }
 
 void ForecastWeatherGraphic::set_icon(string icon_id) {
@@ -44,7 +51,9 @@ int ForecastWeatherGraphic::get_rain_chance() {
 
 void ForecastWeatherGraphic::set_rain_chance(int rain_chance) {
     this->rain_chance = rain_chance;
+    rain_chance_text.setString(to_string(rain_chance) + "%");
 }
+
 string ForecastWeatherGraphic::get_day() {
     return day;
 }
@@ -58,4 +67,5 @@ void ForecastWeatherGraphic::draw(RenderTarget& target, RenderStates states) con
     target.draw(icon);
     target.draw(day_text);
     target.draw(temperature_text);
+    target.draw(rain_chance_text);
 }
