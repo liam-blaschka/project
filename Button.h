@@ -4,6 +4,7 @@
 #include "Graphic.h"
 #include <SFML/Graphics.hpp>
 
+// class for button graphic
 class Button : public Graphic {
     private:
         Sprite icon;

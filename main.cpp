@@ -14,13 +14,29 @@
 #include "Button.h"
 #include <ctime>
 #include <SFML/Graphics.hpp>
-
 #include <iostream>
+#include <string>
 
 using namespace std;
 using namespace sf;
 
 int main() {
+    // request user consent to access their location
+    bool valid_input = false;
+    while (!valid_input) {
+        string user_response;
+        cout << "Do you want to allow this program to access your location? (y/n): ";
+        cin >> user_response;
+        if (user_response == "y" || user_response == "Y") {
+            valid_input = true;
+        } else if (user_response == "n" || user_response == "N") {
+            valid_input = true;
+            return 0;
+        } else {
+            cout << "Invalid response." << endl;
+        }
+    }
+
     RenderWindow window(VideoMode(425, 550), "Weather", Style::Titlebar | Style::Close);
     window.setVerticalSyncEnabled(true);
 

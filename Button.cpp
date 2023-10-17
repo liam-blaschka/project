@@ -2,8 +2,6 @@
 #include "Graphic.h"
 #include <SFML/Graphics.hpp>
 
-#include <iostream>
-
 Button::Button(Font& font, Vector2f position, Sprite icon):Graphic(font, position) {
     this->icon = icon;
     this->icon.setPosition(position);

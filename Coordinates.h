@@ -1,6 +1,7 @@
 #ifndef COORDINATES_H
 #define COORDINATES_H
 
+// struct for storing location coordinates
 struct Coordinates {
     double x;
     double y;

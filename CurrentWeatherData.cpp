@@ -23,6 +23,7 @@ void CurrentWeatherData::set_temperature(int temperature) {
     this->temperature = temperature;
 }
 
+// updates the weather data and graphic using relevant data returned by the API
 void CurrentWeatherData::update_data(json data) {
     icon_id = data["weather"][0]["icon"];
     temperature = round(float(data["temp"]));

@@ -5,6 +5,7 @@
 #include "WeatherGraphic.h"
 #include <SFML/Graphics.hpp>
 
+// represents the weather graphic for the current weather data
 class CurrentWeatherGraphic : public WeatherGraphic {
     private:
         int temperature;

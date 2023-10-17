@@ -9,6 +9,7 @@
 
 using namespace std;
 
+// class represents the current weather data
 class CurrentWeatherData : public WeatherData {
     private:
         int temperature;
