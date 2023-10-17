@@ -11,3 +11,4 @@
 !*.ttf
 !*.png
 !*.txt
+!Makefile
