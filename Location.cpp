@@ -17,12 +17,7 @@ Location::Location(Font& font, Vector2f position, string location, Coordinates c
     text.setFillColor(Color::White);
     text.setPosition(position);
 
-    FloatRect text_bounds = text.getGlobalBounds();
-    hitbox = FloatRect(position.x, position.y + 10, text_bounds.width, text_bounds.height);
-
-    // hitbox_outline = RectangleShape(text.getGlobalBounds().getSize());
-    // hitbox_outline.setPosition(position.x, position.y + 10);
-    // hitbox_outline.setFillColor(Color::Black);
+    hitbox = text.getGlobalBounds();
 }
 
 Location::Location() {}
@@ -39,12 +34,7 @@ void Location::set_string(string location) {
 void Location::set_style(Uint32 style) {
     text_style = style;
     text.setStyle(style);
-    FloatRect text_bounds = text.getGlobalBounds();
-    hitbox = FloatRect(position.x, position.y + 10, text_bounds.width, text_bounds.height);
-
-    // hitbox_outline = RectangleShape(text.getGlobalBounds().getSize());
-    // hitbox_outline.setPosition(position.x, position.y + 10);
-    // hitbox_outline.setFillColor(Color::Black);
+    hitbox = text.getGlobalBounds();
 }
 
 Coordinates Location::get_coordinates() {
@@ -68,16 +58,15 @@ void Location::deactivate() {
 void Location::set_position(Vector2f position) {
     this->position = position;
     text.setPosition(position);
-    FloatRect text_bounds = text.getGlobalBounds();
-    hitbox = FloatRect(position.x, position.y + 10, text_bounds.width, text_bounds.height);
+    hitbox = text.getGlobalBounds();
 }
 
 Vector2f Location::get_position() {
     return position;
 }
 
-FloatRect Location::get_text_bounds() {
-    return text.getGlobalBounds();
+FloatRect Location::get_hitbox() {
+    return hitbox;
 }
 
 bool Location::get_is_hidden() {
@@ -89,6 +78,5 @@ void Location::set_is_hidden(bool is_hidden) {
 }
 
 void Location::draw(RenderTarget& target, RenderStates states) const {
-    // target.draw(hitbox_outline);
     target.draw(text);
 }

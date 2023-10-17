@@ -100,16 +100,14 @@ int SavedLocations::get_position_mode() {
 }
 
 void SavedLocations::set_position_mode(int position_mode) {
-    if (this->position_mode != position_mode) {
-        this->position_mode = position_mode;
-        if (position_mode == 0) {
-            for (int i = 0 ; i < count; i++) {
-                locations[i].set_position(Vector2f(10, 75 + (35 * i)));
-            }
-        } else if (position_mode == 1) {
-            for (int i = 0 ; i < count; i++) {
-                locations[i].set_position(Vector2f(10, 110 + (35 * i)));
-            }
+    this->position_mode = position_mode;
+    if (position_mode == 0) {
+        for (int i = 0 ; i < count; i++) {
+            locations[i].set_position(Vector2f(10, 75 + (35 * i)));
+        }
+    } else if (position_mode == 1) {
+        for (int i = 0 ; i < count; i++) {
+            locations[i].set_position(Vector2f(10, 110 + (35 * i)));
         }
     }
 }

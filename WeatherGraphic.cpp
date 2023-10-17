@@ -11,6 +11,8 @@ WeatherGraphic::WeatherGraphic() {}
 WeatherGraphic::WeatherGraphic(Font& font, Vector2f position):Graphic(font, position) {
     this->font = font;
     this->position = position;
+
+    // weather icons source: https://www.npmjs.com/package/weather-underground-icons
     weather_icons.loadFromFile("weather_icons.png");
     weather_icons.setSmooth(true);
 

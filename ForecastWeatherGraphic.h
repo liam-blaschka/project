@@ -16,6 +16,7 @@ class ForecastWeatherGraphic : public WeatherGraphic {
         int rain_chance;
         string day;
         Text rain_chance_text;
+        Texture rain_drop_texture;
         Sprite rain_drop_icon;
         Text day_text;
     public:

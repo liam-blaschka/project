@@ -24,6 +24,7 @@ class LocationList : public Drawable {
         Coordinates get_coordinates(int index);
         Vector2f get_position(int index);
         void set_position(int index, Vector2f position);
+        FloatRect get_hitbox(int index);
         void activate(int index, Uint32 style);
         void deactivate(int index);
         bool contains_point(int index, Vector2f point);
@@ -31,9 +32,6 @@ class LocationList : public Drawable {
         void set_is_hidden(int index, bool is_hidden);
         void draw(RenderTarget& target, RenderStates states) const override;
         ~LocationList();
-        
-        // int get_position(int index);
-        // void set_position(int index, Vector2f position);
 };
 
 #endif

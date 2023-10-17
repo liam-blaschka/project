@@ -30,7 +30,7 @@ class Location : public Graphic {
         void deactivate();
         void set_position(Vector2f position) override;
         Vector2f get_position();
-        FloatRect get_text_bounds();
+        FloatRect get_hitbox();
         bool get_is_hidden();
         void set_is_hidden(bool is_hidden);
         void draw(RenderTarget& target, RenderStates states) const override;

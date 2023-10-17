@@ -30,8 +30,6 @@ WeatherDataSet::WeatherDataSet(Coordinates location, Font& font) {
     for (int i = 2; i < 8; i++) {
         weather_data_list[i] = new ForecastWeatherData(location, week_days[(current_day_index + i - 1) % 7], font, Vector2f(80, 190 + ((i - 1) * 50)));
     }
-
-    // set list to the 8 weather data objects
 }
 
 void WeatherDataSet::add_weather_data(WeatherData* data) {

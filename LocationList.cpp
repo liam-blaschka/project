@@ -41,15 +41,15 @@ void LocationList::move_location(int original_index, int new_index) {
     if (new_index < count) {
         Location location = locations[original_index];
         
-        if (new_index > original_index) {
+        if (new_index < original_index) {
             // list shifts down
-            for (int i = original_index; i < count - 1; i++) {
-                locations[i] = locations[i + 1];
+            for (int i = original_index; i > new_index; i--) {
+                locations[i] = locations[i - 1];
             }
         } else {
             // list shifts up
-            for (int i = original_index; i < new_index; i++) {
-                locations[i] = locations[i - 1];
+            for (int i = original_index; i < count - 1; i++) {
+                locations[i] = locations[i + 1];
             }
         }
         locations[new_index] = location;
@@ -70,6 +70,10 @@ Vector2f LocationList::get_position(int index) {
 
 void LocationList::set_position(int index, Vector2f position) {
     locations[index].set_position(position);
+}
+
+FloatRect LocationList::get_hitbox(int index) {
+    return locations[index].get_hitbox();
 }
 
 Coordinates LocationList::get_coordinates(int index) {
