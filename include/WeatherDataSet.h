@@ -13,7 +13,6 @@ class WeatherDataSet : public Drawable {
     private:
         WeatherData** weather_data_list;
         int count;
-        int current_day_index;
         string week_days[7] = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
         Coordinates location;
     public:

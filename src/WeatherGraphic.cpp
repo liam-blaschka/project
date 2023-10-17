@@ -6,32 +6,39 @@
 using namespace sf;
 using namespace std;
 
+// default constructor
 WeatherGraphic::WeatherGraphic() {}
 
+// constructor
 WeatherGraphic::WeatherGraphic(Font& font, Vector2f position):Graphic(font, position) {
     this->font = font;
     this->position = position;
 
+    // load weather icon texture
     // weather icons source: https://www.npmjs.com/package/weather-underground-icons
     weather_icons.loadFromFile("weather_icons.png");
     weather_icons.setSmooth(true);
 
-    icon.setPosition(position);
+    icon.setPosition(position); // set icon positoin
 }
 
+// return the position of the weather graphic in the window
 Vector2f WeatherGraphic::get_position() {
     return position;
 }
 
+// sets the position of the weather graphic in the window
 void WeatherGraphic::set_position(Vector2f position) {
     this->position = position;
     icon.setPosition(position);
 }
 
+// returns the icon id
 string WeatherGraphic::get_icon_id() {
     return icon_id;
 }
 
+// sets the icon of the graphic associated with its id
 void WeatherGraphic::set_icon(string icon_id) {
     this->icon_id = icon_id;
     if (icon_id == "01d" || icon_id == "01n") {
@@ -62,9 +69,4 @@ void WeatherGraphic::set_icon(string icon_id) {
         // unknown
         icon = Sprite(weather_icons, IntRect(768, 576, 196, 196));
     }
-}
-
-// for testing
-void WeatherGraphic::draw(RenderTarget& target, RenderStates states) const {
-    target.draw(icon);
 }

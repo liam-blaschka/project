@@ -10,14 +10,18 @@ using namespace sf;
 using namespace std;
 using json = nlohmann::json;
 
+// default constructor
 WeatherData::WeatherData() {}
 
+// constructor
 WeatherData::WeatherData(Coordinates location) {
     this->location = location;
 }
 
+// returns the icon id
 string WeatherData::get_icon_id() {
     return icon_id;
 }
 
+// virtual destructor definition to callback to
 WeatherData::~WeatherData() {}

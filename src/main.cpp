@@ -37,23 +37,26 @@ int main() {
         }
     }
 
+    // creates the SFML window
     RenderWindow window(VideoMode(425, 550), "Weather", Style::Titlebar | Style::Close);
     window.setVerticalSyncEnabled(true);
 
     Cursor mouse_cursor;
     string mouse_cursor_type = "arrow";
 
-    // macos included font
+    // from macos included fonts
     Font font;
     font.loadFromFile("Arial.ttf");
 
+    // creates user object and gets user's location
     User user = User();
     string user_location_string = user.get_location_string();
     Coordinates user_coordinates = user.get_location_coordinates();
-
     Location user_location(font, Vector2f(10, 45), user_location_string, user_coordinates);
 
+    // set active location to user location
     Location active_location(font, Vector2f(10, 3), user_location_string, user_coordinates);
+    active_location.set_style(Text::Bold);
     bool is_user_location_active = true;
 
     // modified image from source: https://www.flaticon.com/free-icon/location_2838912
@@ -64,15 +67,14 @@ int main() {
     user_location_icon.setScale(0.9, 0.9);
     user_location_icon.setPosition(active_location.get_hitbox().width + 25, 5);
 
-    active_location.set_style(Text::Bold);
-
-    SavedLocations saved_locations(5, font);
+    SavedLocations saved_locations(5, font); // reads the saved locations from the csv file
     Text saved_locations_header;
     saved_locations_header.setFont(font);
     saved_locations_header.setCharacterSize(23);
     saved_locations_header.setPosition(12, 50);
     saved_locations_header.setString("Saved locations " + to_string(saved_locations.get_count()) + "/5:");
 
+    // creates position lines that act as guides when moving a saved locaiton by dragging
     RectangleShape position_lines[6];
     FloatRect position_line_hitboxes[6];
     for (int i = 0; i < 6; i++) {
@@ -99,11 +101,10 @@ int main() {
     } else {
         bin_button.set_position(Vector2f(8, 75 + saved_locations.get_count() * 36));
     }
-
     bool is_location_delete_mode = false;
 
+    // makes list of locations available for user to choose from
     LocationList locations(8);
-
     locations.add_location(Location(font, Vector2f(0, 0), "Adelaide", Coordinates(-34.921230, 138.599503)));
     locations.add_location(Location(font, Vector2f(0, 0), "Brisbane", Coordinates(-27.470125, 153.021072)));
     locations.add_location(Location(font, Vector2f(0, 0), "Canberra", Coordinates(-35.282001, 149.128998)));
@@ -112,10 +113,10 @@ int main() {
     locations.add_location(Location(font, Vector2f(0, 0), "Melbourne", Coordinates(-37.840935, 144.946457)));
     locations.add_location(Location(font, Vector2f(0, 0), "Perth", Coordinates(-31.953512, 115.857048)));
     locations.add_location(Location(font, Vector2f(0, 0), "Sydney", Coordinates(-33.865143, 151.209900)));
-    // loops through locations
+
+    // if a location from the available locations is in the user's saved locations, sets it to hidden
     int unhidden_index = 0;
     for (int i = 0; i < 8; i++) {
-        // loops through saved_locations
         for (int j = 0; j < saved_locations.get_count(); j++) {
             if (locations.get_string(i) == saved_locations.get_string(j)) {
                 locations.set_is_hidden(i, true);
@@ -128,20 +129,21 @@ int main() {
             unhidden_index++;
         }
     }
-
+    // background for the locations to choose from
     RectangleShape locations_background(Vector2f(150, unhidden_index * 35));
     locations_background.setPosition(5, 115 + saved_locations.get_count() * 35);
     locations_background.setFillColor(Color::Black);
 
-    WeatherDataSet weather_data_set(user_coordinates, font);
+    WeatherDataSet weather_data_set(user_coordinates, font); // initialise the weather data set
 
+    // update the weather data from the api
     int result = weather_data_set.update_data();
     if (result == -1) {
         return -1;
     }
 
+    // program loop
     string display_mode = "main";
-
     time_t start = time(0);
     bool is_mouse_pressed = false;
     bool is_dragging = false;
@@ -151,10 +153,13 @@ int main() {
     while (window.isOpen()) {
         Event event;
         while (window.pollEvent(event)) {
+            // if close button or escape pressed closes window
             if (event.type == Event::Closed) {
                 window.close();
             } else if (Keyboard::isKeyPressed(Keyboard::Escape)) {
                 window.close();
+
+            // if the mouse leaves the window or window loses focus
             } else if (event.type == Event::LostFocus || event.type == Event::MouseLeft) {
                 if (is_dragging) {
                     saved_locations.set_position(dragged_location, initial_location_position);
@@ -162,17 +167,24 @@ int main() {
                     is_dragging = false;
                 }
                 is_mouse_pressed = false;
+            
+            // if the window gains focus
             } else if (event.type == Event::GainedFocus) {
+                // sets cursor to default arrow if not already
                 if (mouse_cursor_type != "arrow") {
                     mouse_cursor.loadFromSystem(Cursor::Arrow);
                     window.setMouseCursor(mouse_cursor);
                     mouse_cursor_type = "arrow";
                 }
+
+            // if the mouse is moved inside the window
             } else if (event.type == Event::MouseMoved) {
                 bool is_graphic_activated = false;
 
+                // checks if the mouse is being clicked and dragged
                 if (display_mode != "main" && is_mouse_pressed && !is_dragging) {
                     for (int i = 0; i < saved_locations.get_count(); i++) {
+                        // checks if dragging
                         if (saved_locations.contains_point(i, initial_mouse_position) && (abs(event.mouseMove.x - initial_mouse_position.x) > 3 || abs(event.mouseMove.y - initial_mouse_position.y))) {
                             mouse_cursor.loadFromSystem(Cursor::Arrow);
                             window.setMouseCursor(mouse_cursor);
@@ -184,6 +196,8 @@ int main() {
                             is_dragging = true;
                         }
                     }
+                
+                // if not click and dragging
                 } else if (!is_dragging) {
                     // checks if mouse is over the active location
                     if (active_location.contains_point(Vector2f(event.mouseMove.x, event.mouseMove.y))) {
@@ -193,6 +207,7 @@ int main() {
                         active_location.deactivate();
                     }
 
+                    // if on any of the location display modes
                     if (display_mode == "saved_locations" || display_mode == "locations") {
                         // checks if the mouse is over the user location
                         if (!is_user_location_active && user_location.contains_point(Vector2f(event.mouseMove.x, event.mouseMove.y))) {
@@ -206,9 +221,9 @@ int main() {
                         for (int i = 0; i < saved_locations.get_count(); i++) {
                             if (saved_locations.contains_point(i, Vector2f(event.mouseMove.x, event.mouseMove.y))) {
                                 if (is_location_delete_mode) {
-                                    saved_locations.activate(i, Text::StrikeThrough);
+                                    saved_locations.activate(i, Text::StrikeThrough); // if deleting locations activated with strikethrough
                                 } else {
-                                    saved_locations.activate(i, Text::Underlined);
+                                    saved_locations.activate(i, Text::Underlined); // otherwise activated with underlined
                                 }
                                 is_graphic_activated = true;
                             } else {
@@ -232,12 +247,12 @@ int main() {
                             bin_button.set_is_activated(false);
                         }
 
+                        // if display mode is where user is choosing from available locations to add to their saved locations
                         if (display_mode == "locations") {
                             // checks if the mouse is over any locations
                             for (int i = 0; i < 8; i++) {
                                 if (!locations.get_is_hidden(i) && locations.contains_point(i, Vector2f(event.mouseMove.x, event.mouseMove.y))) {
                                     locations.activate(i, Text::Underlined);
-
                                     is_graphic_activated = true;
                                     break;
                                 } else {
@@ -247,12 +262,15 @@ int main() {
                         }
                     }
 
+                    // if the mouse was over any graphics, sets the cursor to pointing hand
                     if (is_graphic_activated) {
                         if (mouse_cursor_type != "hand") {
                             mouse_cursor.loadFromSystem(Cursor::Hand);
                             window.setMouseCursor(mouse_cursor);
                             mouse_cursor_type = "hand";
                         }
+
+                    // else if the mouse was not over any graphics, sets to default cursor
                     } else if (mouse_cursor_type != "arrow") {
                         mouse_cursor.loadFromSystem(Cursor::Arrow);
                         window.setMouseCursor(mouse_cursor);
@@ -260,11 +278,13 @@ int main() {
                     }
                 }
 
+                // if is dragging a saved location
                 if (is_dragging) {
                     // move saved location with mouse
                     saved_locations.set_position(dragged_location, Vector2f(initial_location_position.x + event.mouseMove.x - initial_mouse_position.x,
                                                                             initial_location_position.y + event.mouseMove.y - initial_mouse_position.y));
-                    // check if saved location is over position guide line
+
+                    // check if saved location is over a position guide line
                     activated_line = -1;
                     for (int i = 0; i < 6; i++) {
                         if (position_line_hitboxes[i].intersects(saved_locations.get_hitbox(dragged_location))) {
@@ -274,32 +294,41 @@ int main() {
                         }
                     }
                 }
+            
+            // if mouse is left clicked
             } else if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left) {
-                is_mouse_pressed = true;
-                initial_mouse_position = Vector2f(event.mouseButton.x, event.mouseButton.y);
+                is_mouse_pressed = true; // keeps track of whether mouse is held down or not
+                initial_mouse_position = Vector2f(event.mouseButton.x, event.mouseButton.y); // saves the position of the mouse when clicked
+
+            // if the mouse is released after being clicked
             } else if (event.type == Event::MouseButtonReleased) {
+                // if the user was dragging a location, releases the location
                 if (is_dragging) {
+                    // if location released over position guide line, moves the dragged saved location to new position
                     if (activated_line > -1 && activated_line <= saved_locations.get_count()) {
                         if (activated_line > dragged_location) {
                             saved_locations.move_location(dragged_location, activated_line - 1);
                         } else {
                             saved_locations.move_location(dragged_location, activated_line);
                         }
-                        // adjust graphical position
+                        // adjust graphical position of saved locations
                         if (is_user_location_active) {
                             saved_locations.set_position_mode(0);
                         } else {
                             saved_locations.set_position_mode(1);
                         }
-                    } else {
-                        saved_locations.set_position(dragged_location, initial_location_position);
-                    }
 
+                    // if the location was not released over a position line 
+                    } else {
+                        saved_locations.set_position(dragged_location, initial_location_position); // set location position back to original position
+                    }
                     is_dragging = false;
+
+                // if the user was not dragging, they instead clicked and have now released
                 } else {
                     bool is_graphic_clicked = false;
 
-                    // checks if the active location was clicked
+                    // checks if the active location was clicked, if clicked toggles between main and locations page
                     if (active_location.contains_point(Vector2f(event.mouseButton.x, event.mouseButton.y))) {
                         if (display_mode == "main") {
                             display_mode = "saved_locations";
@@ -310,13 +339,14 @@ int main() {
                         }
                         is_graphic_clicked = true;
 
-                    // checks if the user location was clicked
+                    // checks if the user location was clicked, if so sets active location to user location
+                    // and goes to main page
                     } else if (!is_graphic_clicked && !is_user_location_active && user_location.contains_point(Vector2f(event.mouseButton.x, event.mouseButton.y))) {
                         active_location.set_string(user_location_string);
                         active_location.set_coordinates(user_coordinates);
                         weather_data_set.set_location(user_coordinates);
 
-                        result = weather_data_set.update_data();
+                        result = weather_data_set.update_data(); // updates weather data for user location
                         if (result == -1) {
                             return -1;
                         }
@@ -352,11 +382,13 @@ int main() {
                         add_location_button.set_is_activated(false);
                         bin_button.set_is_activated(false);
                         is_graphic_clicked = true;
+
+                    // if display mode is on a location display mode and no graphic has been clicked yet
                     } else if (!is_graphic_clicked && (display_mode == "saved_locations" || display_mode == "locations")) {
                         // checks if any of the saved locations were clicked
                         for (int i = 0; i < saved_locations.get_count(); i++) {
                             if (saved_locations.contains_point(i, Vector2f(event.mouseButton.x, event.mouseButton.y))) {
-                                // if location is being removed
+                                // if location is being removed, is in delete mode, then removes location
                                 if (is_location_delete_mode) {
                                     string removed_location = saved_locations.get_string(i);
                                     saved_locations.remove_location(i);
@@ -442,7 +474,7 @@ int main() {
                             }
                         }
 
-                        // checks if add location button was clicked
+                        // checks if add location button was clicked, toggles between add location mode being on or off
                         if (!is_graphic_clicked && saved_locations.get_count() < 5 && add_location_button.contains_point(Vector2f(event.mouseButton.x, event.mouseButton.y))) {
                             if (display_mode == "saved_locations") {
                                 display_mode = "locations";
@@ -454,7 +486,7 @@ int main() {
                             is_graphic_clicked = true;
                         }
 
-                        // checks if bin button was clicked
+                        // checks if bin button was clicked, toggles between delete location mode being on or off
                         if (!is_graphic_clicked && saved_locations.get_count() > 0) {
                             if (bin_button.contains_point(Vector2f(event.mouseButton.x, event.mouseButton.y))) {
                                 if (is_location_delete_mode) {
@@ -462,7 +494,6 @@ int main() {
                                 } else {
                                     is_location_delete_mode = true;
                                 }
-
                                 if (display_mode == "locations") {
                                     display_mode = "saved_locations";
                                 }
@@ -532,9 +563,11 @@ int main() {
                 is_mouse_pressed = false;
             }   
         }
-
+        
+        // if 30 seconds has passed since the weather data was last updated
         if (display_mode == "main" && difftime(time(0), start) >= 30) {
-            cout << "refreshed" << endl;
+            // updates the weather data
+            cout << "refreshing weather data..." << endl;
             user.update_location();
             if (user.get_location_string() != user_location_string) {
                 user_location_string = user.get_location_string();
@@ -547,15 +580,18 @@ int main() {
                     active_location.set_coordinates(user_coordinates);
                 }
             }
+            // calls the update data function of the weather data set to update the weather data
             result = weather_data_set.update_data();
             if (result == -1) {
                 return -1;
             }
             start = time(0);
+            cout << "done." << endl;
         }
 
-        window.clear(Color(66, 182, 245));
+        window.clear(Color(66, 182, 245)); // sets the background colour of the app
 
+        // draws the graphics to the window
         window.draw(active_location);
         if (display_mode == "main") {
             window.draw(weather_data_set);
@@ -581,12 +617,11 @@ int main() {
                 window.draw(locations);
             }
         }
-
         if (is_dragging && activated_line > -1) {
             window.draw(position_lines[activated_line]);
         }
 
-        window.display();
+        window.display(); // displays the window
     }
 
     return 0;

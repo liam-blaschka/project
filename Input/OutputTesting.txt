@@ -1,0 +1,52 @@
+Input and Output Testing for Weather Application
+
+
+// Testing when user clicks escape button on keyboard
+Input: Button click (escape) 
+Output: Window closes
+
+// Testing when user minimzies Window
+Input: Mouse hover and click on minimzie window icon
+Output: Minimize icon lights up and when clicked window minimzies
+
+// Testing when user closes window
+Input: Mouse hover and click on close window icon
+Output: Close icon lights up and when clicked window closes
+
+// Testing hovering loction
+Input: Mouse hover on location
+Output: Location name underlines and user mouse hand changes
+
+// Testing clicking on location top left
+Input: Mouse click on the location top left
+Output: Displays another page containg the user locations, list of saved locations from 0 to 5 and addition icon to add saved locations
+
+// Testing addition icon
+Input: Mouse clicks on the addition icon
+Output: List of Australia capital cities
+
+// Testing hovering on a city on the list of capitial citites
+Input: User cursor hovering on top of a citiy on the list of capital cities
+Output: City underlines and cursor changes
+
+// Testing saving city from list of capitial cities
+Input: User clicks on city on the list of capital cities
+Output: City clicked on removes from list of capital cities and displays under saved locations
+
+// Testing dragging locations up and down within saved locations
+Input: User clicks and hovers over a saved location and swaps its place with another saved location
+Output: The selected saved location when dragged previews the next postion with a dark underline and when mouse click is released the location is moved to next position
+
+// Testing hovering on bin icon
+Input: User cursor hovers over bin icon
+Output: User cursor changes and bin icon darkens
+
+// Testing deleting saved locations 
+Input: Click on bin icon and click on saved location to delete
+Output: Saved location cities chosen to delete previews by having line crossing out the name of the city and when user clicks on the city it is deleted off the saved location 
+        and added back to the list of capital cities.
+
+// Testing clicking on saved location city
+Input: Click on saved location city
+Output: City is underlined and when clicked displays the weather, forecast and rain chance for the city
+

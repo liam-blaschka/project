@@ -11,10 +11,16 @@ class Button : public Graphic {
         RectangleShape activated_background;
         bool is_activated;
     public:
+        // constructor
         Button(Font& font, Vector2f position, Sprite icon);
+
+        // sets the boolean is activated as a way to change how button is displayed
         void set_is_activated(bool is_activated);
-        bool contains_point(Vector2f point);
+
+        // sets the position of the button graphic in the window
         void set_position(Vector2f position) override;
+
+        // draws the button to the window
         void draw(RenderTarget& target, RenderStates states) const override;
 };
 
