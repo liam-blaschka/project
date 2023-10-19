@@ -8,7 +8,7 @@ Button::Button(Font& font, Vector2f position, Sprite icon):Graphic(font, positio
     this->icon.setPosition(position);
 
     // sets the hitbox of the icon
-    hitbox = icon.getGlobalBounds();
+    hitbox = this->icon.getGlobalBounds();
 
     // sets the background of the button, visible when is activated
     activated_background = RectangleShape(Vector2f(hitbox.width, hitbox.height));

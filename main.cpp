@@ -593,6 +593,9 @@ int main() {
 
         // draws the graphics to the window
         window.draw(active_location);
+        if (is_dragging && activated_line > -1) {
+            window.draw(position_lines[activated_line]);
+        }
         if (display_mode == "main") {
             window.draw(weather_data_set);
             if (is_user_location_active) {
@@ -616,9 +619,6 @@ int main() {
                 window.draw(locations_background);
                 window.draw(locations);
             }
-        }
-        if (is_dragging && activated_line > -1) {
-            window.draw(position_lines[activated_line]);
         }
 
         window.display(); // displays the window
